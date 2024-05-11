@@ -2,7 +2,7 @@
 
 ## Database Schema Design
 
-![alt text](C:\Users\Tyrson\Pictures\app-academy-projects\mod-4-EarthNbn\schema.png)
+![db-schema]
 
 ## API Documentation
 
@@ -1451,3 +1451,6 @@ Return spots filtered by query parameters.
       }
     }
     ```
+
+
+[db-schema]: ./schema.png
