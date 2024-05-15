@@ -10,7 +10,14 @@ router.use('/session', sessionRouter);
 router.use('/users', usersRouter);
 
 router.post('/test', (req, res) => {
-  res.json({ requestBody: req.body });
+  try {
+    res.json({ requestBody: req.body });    
+  } catch (e) {
+    console.log(e)
+    res.json({
+      message: "test route failed",
+    })
+  }
 });
 
 module.exports = router;
