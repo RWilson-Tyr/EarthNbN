@@ -13,10 +13,7 @@ router.post('/test', (req, res) => {
   try {
     res.json({ requestBody: req.body });    
   } catch (e) {
-    console.log(e)
-    res.json({
-      message: "test route failed",
-    })
+    console.error(e)
   }
 });
 
