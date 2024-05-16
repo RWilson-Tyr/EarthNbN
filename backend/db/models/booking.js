@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  booking.init({
+  Booking.init({
     spotId: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -34,5 +34,5 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Booking',
   });
-  return booking;
+  return Booking;
 };

@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  spotImage.init({
+  SpotImage.init({
     spotId: {
       type: DataTypes.INTEGER
     },
@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'spotImage',
+    modelName: 'SpotImage',
   });
   return SpotImage;
 };

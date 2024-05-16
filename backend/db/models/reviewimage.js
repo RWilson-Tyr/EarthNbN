@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  reviewImage.init({
+  ReviewImage.init({
     reviewId: {
       type: DataTypes.INTEGER
     },
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'reviewImage',
+    modelName: 'ReviewImage',
   });
   return ReviewImage;
 };

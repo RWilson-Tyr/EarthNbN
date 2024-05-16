@@ -13,20 +13,20 @@ module.exports = {
       {
         spotId: 1,
         userId: 2,
-        startDate: Sequelize.DATE,
-        endDate: Sequelize.DATE,
+        startDate: Date.now() + 86400000,
+        endDate: Date.now() + 172800000,
       },
       {
         spotId: 2,
         userId: 3,
-        startDate: Sequelize.DATE,
-        endDate: Sequelize.DATE,
+        startDate: Date.now() + 86400000,
+        endDate: Date.now() + 172800000,
       },
       {
         spotId: 3,
         userId: 1,
-        startDate: Sequelize.DATE,
-        endDate: Sequelize.DATE,
+        startDate: Date.now() + 86400000,
+        endDate: Date.now() + 172800000,
       },
     ], { validate: true });
   },
