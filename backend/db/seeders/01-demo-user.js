@@ -4,13 +4,14 @@ const { User } = require('../models');
 const bcrypt = require("bcryptjs");
 
 let options = {};
+options.tableName = "Users";
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await User.bulkCreate([
+    await User.bulkCreate(options, [
       {
         firstName: "Test1",
         lastName: "Dummy1",
