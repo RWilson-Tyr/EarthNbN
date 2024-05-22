@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation')
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User } = require('../../db/models');
+const { User, Spot } = require('../../db/models');
 
 const router = express.Router();
 
@@ -43,6 +43,17 @@ router.post('/', validateSignup, async (req, res) => {
     return res.json({
     user: safeUser
     });
+});
+
+
+router.get('/test',async(req, res) => {
+  let testing = await Spot.findAll({
+    includes: [{model: "Users"}],
+    where: {
+      ownerId: 2
+    }
+  })
+  res.json(testing)
 });
 
   

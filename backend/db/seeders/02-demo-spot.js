@@ -10,9 +10,9 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await Spot.bulkCreate(options,[
+    await Spot.bulkCreate([
       {
-        ownerId: 1,
+        ownerId: 2,
         address: "1 main",
         city: "test city",
         state: "test state",
