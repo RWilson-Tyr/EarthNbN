@@ -37,10 +37,9 @@ router.get('/', async(req, res, next) => {
                 id: spotId
             }
         })
-        if(spots.length <= 0){throw new CustomErrHandler(404, "hello")}
-            res.json({spots})
+        if(spots.length > 0){res.json({spots})}
     } catch (err) {
-        next(err)
+        {throw new CustomErrHandler(404, "Spot couldn't be found")}
     }});
 
 //CREATE
@@ -64,10 +63,9 @@ router.put('/:spotId', requireAuth, async(req, res, next) => {
         
         if(updateSpot.ownerId === user){
         await updateSpot.update({address, city, state, country, lat, lng, name, description, price})
-        res.json(updateSpot)} else {res.json({message: "spot update failure"})}
-        
+        res.json(updateSpot)}
     } catch (error) {
-        next(error)
+        throw new CustomErrHandler(404, "Spot couldn't be found")
     }
   });
 
@@ -79,10 +77,10 @@ router.delete('/:spotId',requireAuth, async(req, res, next) => {
         let deleteSpot = await Spot.findByPk(spotId)
         if(user.id === deleteSpot.ownerId){
         await deleteSpot.destroy()
-        res.json(deleteSpot)
+        res.json({message: "Successfully deleted"})
     }
     } catch (error) {
-        next(error)
+        throw new CustomErrHandler(404, "Spot couldn't be found")
     }
   });
 
