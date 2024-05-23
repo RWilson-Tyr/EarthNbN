@@ -1,38 +1,35 @@
 const express = require('express');
 const { Spot } = require('../../db/models');
-const {requireAuth} = require("../../utils/auth.js")
+const {requireAuth} = require("../../utils/auth.js");
+const { CustomErrHandler } = require('../../errors/error');
 
 const router = express.Router();
 
 //READ
-router.get('/', async(req, res) => {
+router.get('/', async(req, res, next) => {
     try {
-        let spots = await Spot.findAll()
-        res.json({spots})
+        let findSpots = await Spot.findAll()
+        res.json({Spots: findSpots})
     } catch (error) {
-        //custom error handler scheduled
-        return console.log(error)
+        next(error)
     }
   });
 
-  router.get('/current', async(req, res) => {
+  router.get('/current',requireAuth, async(req, res, next) => {
     try {
-        const { user } = req
-        requireAuth(req)
-        if(user){
-        let spots = await Spot.findAll({
+        const {user} = req
+        let findSpots = await Spot.findAll({
             where: {
                 ownerId: user.id
             }
         })
-        res.json({spots})}
+        res.json({Spots: findSpots})
     } catch (error) {
-        //custom error handler scheduled
-        return console.log(error)
+        next(error)
     }
   });
 
-  router.get('/:spotId', async(req, res) => {
+  router.get('/:spotId', async(req, res, next) => {
     try {
         const {spotId} = req.params
         let spots = await Spot.findAll({
@@ -40,30 +37,25 @@ router.get('/', async(req, res) => {
                 id: spotId
             }
         })
-        if(spots.length >0)
-        {res.json({spots})}
-    } catch (error) {
-        //custom error handler scheduled
-        return console.log(error)
-    }
-  });
+        if(spots.length <= 0){throw new CustomErrHandler(404, "hello")}
+            res.json({spots})
+    } catch (err) {
+        next(err)
+    }});
 
 //CREATE
-router.post('/', async(req, res) => {
+router.post('/', requireAuth, async(req, res, next) => {
     try {
-        const { user } = req
         const {address, city, state, country, lat, lng, name, description, price} = req.body
-        if(user){
         let createSpot = await Spot.create({address, city, state, country, lat, lng, name, description, price, ownerId : user})
-        res.json(createSpot)}
+        res.json(createSpot)
     } catch (error) {
-        //custom error handler scheduled
-        return console.log(error)
+        next(error)
     }
   });
 
 //UPDATE
-router.put('/:spotId', async(req, res) => {
+router.put('/:spotId', requireAuth, async(req, res, next) => {
     try {
         const { user } = req
         const {id} = req.params
@@ -72,16 +64,15 @@ router.put('/:spotId', async(req, res) => {
         
         if(updateSpot.ownerId === user){
         await updateSpot.update({address, city, state, country, lat, lng, name, description, price})
-        res.json(updateSpot)}
+        res.json(updateSpot)} else {res.json({message: "spot update failure"})}
         
     } catch (error) {
-        //custom error handler scheduled
-        return console.log(error)
+        next(error)
     }
   });
 
 //DELETE
-router.delete('/:spotId', async(req, res) => {
+router.delete('/:spotId',requireAuth, async(req, res, next) => {
     try {
         const {user} = req
         const {spotId} = req.params
@@ -91,8 +82,7 @@ router.delete('/:spotId', async(req, res) => {
         res.json(deleteSpot)
     }
     } catch (error) {
-        //custom error handler scheduled
-        return console.log(error)
+        next(error)
     }
   });
 

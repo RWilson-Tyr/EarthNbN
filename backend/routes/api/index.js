@@ -6,6 +6,11 @@ const { restoreUser } = require('../../utils/auth.js');
 
 router.use(restoreUser);
 
+//temp home page
+router.get('/',(req,res,next)=>{
+  res.json({message: "Welcome Home"})
+})
+
 router.use('/session', sessionRouter);
 
 router.use('/users', usersRouter);
