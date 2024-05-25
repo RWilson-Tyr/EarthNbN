@@ -29,29 +29,66 @@ router.get('/', async(req, res, next) => {
     }
   });
 
-  router.get('/:spotId', async(req, res, next) => {
-    try {
+router.get('/:spotId', async(req, res, next) => {
+  try {
         const {spotId} = req.params
         let spots = await Spot.findAll({
             where: {
                 id: spotId
             }
         })
-        if(spots.length > 0){res.json({spots})}
+        if(spots.length > 0){res.json({Spots: spots})}
     } catch (err) {
         {throw new CustomErrHandler(404, "Spot couldn't be found")}
-    }});
+    }
+});
+
+    //READ - reviews based on SpotId
+router.get('/:spotId/reviews', async(req, res, next)=>{
+    try {
+        res.json({message: "hello"})
+    } catch (err) {
+        
+    }
+})
+
+//READ - all bookings based on SpotId
+router.get('/:spotId/bookings', async(req, res, next)=>{
+    try {
+        res.json({message: "all bookings based on spotId"})
+    } catch (err) {
+        
+    }
+})
 
 //CREATE
 router.post('/', requireAuth, async(req, res, next) => {
     try {
         const {address, city, state, country, lat, lng, name, description, price} = req.body
-        let createSpot = await Spot.create({address, city, state, country, lat, lng, name, description, price, ownerId : user})
+        let createSpot = await Spot.create({address, city, state, country, lat, lng, name, description, price, ownerId : req.user.id})
         res.json(createSpot)
     } catch (error) {
         next(error)
     }
   });
+
+//CREATE - review based on SpotId
+router.post('/:spotId/reviews', async(req, res, next)=>{
+    try {
+        res.json({message: "hello"})
+    } catch (err) {
+        
+    }
+})
+
+//CREATE - booking based on SpotId
+router.post('/:spotId/bookings', async(req, res, next)=>{
+    try {
+        res.json({message: "Create booking"})
+    } catch (err) {
+        
+    }
+})
 
 //UPDATE
 router.put('/:spotId', requireAuth, async(req, res, next) => {
