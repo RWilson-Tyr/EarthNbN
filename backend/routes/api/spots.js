@@ -41,7 +41,7 @@ router.get('/:spotId', async(req, res, next) => {
         if(spots.length <= 0){
             throw new Error("Spot couldn't be found")
         }
-        res.json({Spots: spots})
+        res.json(...spots)
 
     } catch (err) {
         next(err)

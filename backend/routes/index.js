@@ -12,4 +12,7 @@ router.get("/api/csrf/restore", (req, res) => {
   });
 });
 
+router.get('/',(req,res,next)=>{
+  res.json({message: "Welcome Home"})
+})
 module.exports = router;

@@ -9,7 +9,7 @@ router.use(restoreUser);
 
 //temp home page
 router.get('/',(req,res,next)=>{
-  res.json({message: "Welcome Home"})
+  res.json({message: "Welcome to API Home"})
 })
 
 router.use('/session', sessionRouter);
