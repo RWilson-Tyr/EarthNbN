@@ -1,14 +1,22 @@
 const express = require('express');
-const { Review } = require('../../db/models');
+const { Review, User, ReviewImages } = require('../../db/models');
 const {requireAuth} = require("../../utils/auth.js");
 const { CustomErrHandler } = require('../../errors/error');
 
 const router = express.Router();
 
 //READ - reviews by current user
-router.get('/current', async(req, res, next)=>{
+router.get('/current', requireAuth, async(req, res, next)=>{
     try {
-        res.json({message: "reviews current"})
+        // res.json({message: "hello"})
+        console.log("---------------->",req.user.id)
+        let findReviews = await Review.findAll({
+            include: [User
+                // , ReviewImages
+            ],
+            where: {userId: req.user.id}
+            })
+        res.json({Reviews: findReviews})
     } catch (err) {
         
     }
