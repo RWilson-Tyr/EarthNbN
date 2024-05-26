@@ -1,34 +1,40 @@
 const express = require('express');
 const { Booking } = require('../../db/models');
-const {requireAuth} = require("../../utils/auth.js");
+const { requireAuth } = require("../../utils/auth.js");
 const { CustomErrHandler } = require('../../errors/error');
 
 const router = express.Router();
 
-//READ - all current user bookings
-router.get('/', async(req, res, next)=>{
+//READ **INCOMPLETE** - all current user bookings
+router.get('/', async (req, res, next) => {
     try {
-        res.json({message: "current user bookings"})
+        const findAll = await Booking.findAll({})
+        res.json(findAll)
     } catch (err) {
-        
+        next(err)
     }
 })
 
-//UPDATE - booking based on booking Id
-router.put('/:bookingId', async(req, res, next)=>{
+//UPDATE **INCOMPLETE** - booking based on booking Id
+router.put('/:bookingId', async (req, res, next) => {
     try {
-        res.json({message: "update booking"})
+        let { startDate, endDate } = req.body
+        const findBooking = await Booking.findOne({ where: { id: req.params.bookingId } })
+        const updateBooking = await findBooking.update({ startDate, endDate })
+        res.json(updateBooking)
     } catch (err) {
-        
+        next(err)
     }
 })
 
-//DELETE - booking by booking ID
-router.delete('/:bookingId', async(req, res, next)=>{
+//DELETE **INCOMPLETE** - booking by booking ID
+router.delete('/:bookingId', async (req, res, next) => {
     try {
-        res.json({message: "update booking"})
+        let deleteBooking = await Booking.findOne({ where: { id: req.params.bookingId } })
+        await deleteBooking.destroy()
+        res.json({ message: "update booking" })
     } catch (err) {
-        
+        next(err)
     }
 })
 

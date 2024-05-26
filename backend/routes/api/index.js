@@ -3,13 +3,14 @@ const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
 const spotsRouter = require('./spots.js');
 const reviewsRouter = require('./reviews.js');
+const bookingsRouter = require('./bookings.js');
 const { restoreUser } = require('../../utils/auth.js');
 
 router.use(restoreUser);
 
 //temp home page
-router.get('/',(req,res,next)=>{
-  res.json({message: "Welcome to API Home"})
+router.get('/', (req, res, next) => {
+  res.json({ message: "Welcome to API Home" })
 })
 
 router.use('/session', sessionRouter);
@@ -20,9 +21,11 @@ router.use('/spots', spotsRouter);
 
 router.use('/reviews', reviewsRouter);
 
+router.use('/bookings', bookingsRouter);
+
 router.post('/test', (req, res) => {
   try {
-    res.json({ requestBody: req.body });    
+    res.json({ requestBody: req.body });
   } catch (e) {
     console.log(e)
     res.json({

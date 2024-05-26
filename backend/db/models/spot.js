@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Spot.belongsTo(models.User, {foreignKey: "ownerId", onDelete: "CASCADE"})
-      Spot.hasMany(models.SpotImage, {foreignKey: "spotId", onDelete: "CASCADE"})
+      Spot.belongsTo(models.User, { foreignKey: "ownerId", onDelete: "CASCADE", hooks: true })
+      Spot.hasMany(models.SpotImage, { foreignKey: "spotId", onDelete: "CASCADE", hooks: true })
       // Spot.hasMany(models.Booking, {foreignKey: "spotId", onDelete: "CASCADE"})
-      Spot.hasMany(models.Review, {foreignKey: "spotId", onDelete: "CASCADE"})
+      Spot.hasMany(models.Review, { foreignKey: "spotId", onDelete: "CASCADE", hooks: true })
     }
   }
   Spot.init({
@@ -26,28 +26,28 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       validate: {
-        
+
       }
     },
     city: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        
+
       }
     },
     state: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        
+
       }
     },
     country: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        
+
       }
     },
     lat: {
@@ -71,7 +71,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       validate: {
-        len: [1,50]
+        len: [1, 50]
       }
     },
     description: {
