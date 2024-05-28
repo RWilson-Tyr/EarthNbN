@@ -28,11 +28,13 @@ const validateSignup = [
 ];
 
 // Sign up
-router.post('/', validateSignup, async (req, res) => {
+router.post('/', validateSignup, async (req, res, next) => {
+  console.log("before try block")
   try {
-    const { email, password, username, firstName, lastName } = req.body;
+    console.log("inside try block top")
+    const { firstName, lastName, email, password, username } = req.body;
     const hashedPassword = bcrypt.hashSync(password);
-    const user = await User.create({ email, username, hashedPassword, firstName, lastName });
+    const user = await User.create({firstName, lastName, email, username, hashedPassword });
     const safeUser = {
       id: user.id,
       firstName: user.firstName,
@@ -40,7 +42,6 @@ router.post('/', validateSignup, async (req, res) => {
       email: user.email,
       username: user.username,
     };
-
     await setTokenCookie(res, safeUser);
 
     return res.json({

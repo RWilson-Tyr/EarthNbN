@@ -86,7 +86,7 @@ router.post('/', requireAuth, async (req, res, next) => {
 router.post('/:spotId/spotimages', requireAuth, async (req, res, next) => {
     try {
         const { url, preview } = req.body
-        let spotId = req.params.spotId
+        let spotId = parseInt(req.params.spotId)
         const findSpot = await Spot.findOne({
             where: {
                 id: spotId
@@ -149,11 +149,11 @@ router.put('/:spotId', requireAuth, async (req, res, next) => {
 router.delete('/:spotId', requireAuth, async (req, res, next) => {
     try {
         const { user } = req
-        const { spotId } = req.params
-        let deleteSpot = await Spot.findByPk(spotId)
+        const spot = parseInt(req.params.spotId)
+        let deleteSpot = await Spot.findByPk(spot)
         if (deleteSpot === null) { throw new Error("Spot couldn't be found") }
-        if (user.id === deleteSpot.ownerId) {
-            await deleteSpot.destroy()
+        if(user.id === deleteSpot.ownerId){
+            await Spot.destroy({where: {id: spot}})
             res.json({ message: "Successfully deleted" })
         }
     } catch (error) {
