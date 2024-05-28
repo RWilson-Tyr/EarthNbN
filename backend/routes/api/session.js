@@ -21,9 +21,10 @@ const validateLogin = [
 ];
 
 // Log in
-router.post('/', validateLogin, async(req, res, next)=>{
+router.post('/', validateLogin, async (req, res, next) => {
+  console.log("log in")
   const { credential, password } = req.body;
-  
+
   const user = await User.unscoped().findOne({
     where: {
       [Op.or]: {
@@ -51,14 +52,14 @@ router.post('/', validateLogin, async(req, res, next)=>{
 });
 
 // Log out
-router.delete('/',(_req, res)=>{
-    res.clearCookie('XSRF-TOKEN');
-    return res.json({ message: 'success' });
-  }
+router.delete('/', (_req, res) => {
+  res.clearCookie('XSRF-TOKEN');
+  return res.json({ message: 'success' });
+}
 );
 
 //Get the current user
-router.get('/',(req, res) => {
+router.get('/', (req, res) => {
   const { user } = req;
   if (user) {
     const safeUser = {
@@ -73,7 +74,7 @@ router.get('/',(req, res) => {
     });
   } else return res.json({ user: null });
 });
-  
+
 
 
 module.exports = router;
