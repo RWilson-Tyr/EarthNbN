@@ -32,10 +32,20 @@ module.exports = (sequelize, DataTypes) => {
     stars: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      defaultValue: new Date()
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      defaultValue: new Date()
     }
   }, {
     sequelize,
-    modelName: 'Review',
+    modelName: 'Review'
   });
   return Review;
 };

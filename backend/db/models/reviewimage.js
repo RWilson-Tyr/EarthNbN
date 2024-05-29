@@ -20,10 +20,20 @@ module.exports = (sequelize, DataTypes) => {
     },
     url: {
       type: DataTypes.STRING
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      defaultValue: new Date()
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      defaultValue: new Date()
     }
   }, {
     sequelize,
-    modelName: 'ReviewImage',
+    modelName: 'ReviewImage'
   });
   return ReviewImage;
 };
