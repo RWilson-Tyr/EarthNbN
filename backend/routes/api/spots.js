@@ -1,16 +1,16 @@
 const express = require('express');
 const { Spot, SpotImage, Review, Booking, User, ReviewImage } = require('../../db/models');
 const { requireAuth } = require("../../utils/auth.js");
-const { CustomErrHandler } = require('../../errors/error');
-const reviewimage = require('../../db/models/reviewimage.js');
 
 const router = express.Router();
 
-//READ **INCOMPLETE**(missing previewImage and avgRating) - Get all spots
+//READ **INCOMPLETE** - Get all spots
+//(missing previewImage and avgRating)
 router.get('/', async (req, res, next) => {
     try {
         let findSpots = await Spot.findAll({
-            include: {model: SpotImage}
+            include: {model: SpotImage, attributes: ["url"]}
+
         })
         res.json({ Spots: findSpots })
     } catch (error) {
@@ -18,7 +18,8 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-//READ **INCOMPLETE**(missing previewImage and avgRating) - get all spots owned by current user
+//READ **INCOMPLETE** - get all spots owned by current user
+//(missing previewImage and avgRating)
 router.get('/current', requireAuth, async (req, res, next) => {
     try {
         let findSpots = await Spot.findAll({
@@ -32,7 +33,8 @@ router.get('/current', requireAuth, async (req, res, next) => {
     }
 });
 
-//READ **COMPLETED** - get spot based on spot ID
+//READ **INCOMPLETE** - get spot based on spot ID
+//need numReviews and avgStarRating
 router.get('/:spotId', async (req, res, next) => {
     try {
         const spotId = parseInt(req.params.spotId)
@@ -41,11 +43,13 @@ router.get('/:spotId', async (req, res, next) => {
             where: {id: spotId},
             include: [{
                 model: SpotImage,
-                where: { spotId }
+                where: { spotId },
+                attributes: {exclude: ['spotId', 'updatedAt', 'createdAt']}
             },{
                 model: User,
                 as: 'Owner',
-                where: {id: ownerId}
+                where: {id: ownerId},
+                attributes: { exclude: ['username', 'email', 'hashedPassword', 'createdAt', 'updatedAt']}
             },]
         })
         if (!spots) { throw new Error("Spot couldn't be found") }
@@ -56,12 +60,14 @@ router.get('/:spotId', async (req, res, next) => {
     }
 });
 
-//READ **UNFINISHED** - reviews based on SpotId
+//READ **COMPLETE** - reviews based on SpotId
 router.get('/:spotId/reviews', async (req, res, next) => {
     try {
         let spotId = parseInt(req.params.spotId)
         let spotReviews = await Review.findAll({ where: spotId,
-            include: [{model: User},{model: ReviewImage}]
+            include: [
+                {model: User, attributes: {exclude: ['username', 'email', 'hashedPassword', 'createdAt', 'updatedAt']}},
+                {model: ReviewImage, attributes: {exclude: ['reviewId', 'createdAt', 'updatedAt']}}]
         })
         res.json({ Reviews: spotReviews })
     } catch (err) {
@@ -69,13 +75,19 @@ router.get('/:spotId/reviews', async (req, res, next) => {
     }
 })
 
-//READ **INCOMPLETE** - all bookings based on SpotId
-router.get('/:spotId/bookings', async (req, res, next) => {
+//READ **COMPLETE** - all bookings based on SpotId
+router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
     try {
+        let reqUser = parseInt(req.user.id)
         let spotId = parseInt(req.params.spotId)
-        let findAll = await Booking.findAll({ where: spotId, include: {model: User} })
+        let ownerFindAll = await Booking.findAll({ where: spotId, include: {model: User, attributes: {exclude: ['username', 'email', 'hashedPassword', 'createdAt', 'updatedAt']}}})
+        let findAll = await Booking.findAll({where: {spotId},attributes: {exclude: ['id', 'userId', 'createdAt', 'updatedAt']}})
         if(!findAll){throw new Error("no bookings found for this spot!")}
-        res.json({Bookings: findAll})
+        if(reqUser === spotId){
+        res.json({Bookings: ownerFindAll})}
+        else {
+            res.json({Bookings: findAll})
+        }
     } catch (err) {
         next(err)
     }
@@ -93,13 +105,13 @@ router.post('/', requireAuth, async (req, res, next) => {
 });
 
 //CREATE **COMPLETED** - Add an image to spotId
-router.post('/:spotId/spotimages', requireAuth, async (req, res, next) => {
+router.post('/:spotId/images', requireAuth, async (req, res, next) => {
     try {
         const { url, preview } = req.body
         const spotId = parseInt(req.params.spotId)
         const findSpot = await Spot.findByPk(spotId)
         if (!findSpot) { throw new Error("Spot couldn't be found") }
-        if (req.user.id !== findSpot.ownerId) { throw new Error("You don't own this Spot") }        
+        if (req.user.id !== findSpot.ownerId) {throw new Error('Forbidden')}        
         const createImage = await SpotImage.create({ spotId, url, preview })
         let id = createImage.id
         res.json({ id, url, preview })
@@ -109,8 +121,8 @@ router.post('/:spotId/spotimages', requireAuth, async (req, res, next) => {
 })
 
 
-//CREATE **INCOMPLETE** - review based on SpotId
-router.post('/:spotId/reviews', async (req, res, next) => {
+//CREATE **COMPLETE** - review based on SpotId
+router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
     try {
         const { review, stars } = req.body
         const spotId = parseInt(req.params.spotId)
@@ -124,7 +136,7 @@ router.post('/:spotId/reviews', async (req, res, next) => {
 })
 
 //CREATE **INCOMPLETE** - booking based on SpotId
-router.post('/:spotId/bookings', async (req, res, next) => {
+router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
     try {
         const { startDate, endDate } = req.body
         const spotId = parseInt(req.params.spotId)
@@ -140,15 +152,18 @@ router.post('/:spotId/bookings', async (req, res, next) => {
 //UPDATE **COMPLETED**
 router.put('/:spotId', requireAuth, async (req, res, next) => {
     try {
-        const { user } = req
-        const { spotId } = req.params
+        const reqUser = req.user.id
+        const spotId = parseInt(req.params.spotId)
+        console.log(isNaN(spotId))
+        if(isNaN(spotId)){throw new Error(`You have input /api/spots/${req.params.spotId}. ${req.params.spotId} is not a number`)}
         const { address, city, state, country, lat, lng, name, description, price } = req.body
         let updateSpot = await Spot.findOne({ where: { id: spotId } })
         if (updateSpot === null) { throw new Error("Spot couldn't be found") }
-        if (updateSpot.ownerId === user.id) {
+        if (updateSpot.ownerId === reqUser) {
             await updateSpot.update({ address, city, state, country, lat, lng, name, description, price })
             res.json(updateSpot)
         }
+        if (updateSpot.ownerId !== reqUser){throw new Error('Forbidden')}
     } catch (error) {
         next(error)
     }
@@ -165,6 +180,7 @@ router.delete('/:spotId', requireAuth, async (req, res, next) => {
             await Spot.destroy({where: {id: spot}})
             res.json({ message: "Successfully deleted" })
         }
+        if(user.id !== deleteSpot.ownerId){throw new Error('Forbidden')}
     } catch (error) {
         next(error)
     }
