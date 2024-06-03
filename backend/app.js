@@ -55,6 +55,15 @@ app.use((err, _req, _res, next) => {
     for (let error of err.errors) {
       errors[error.path] = error.message;
     }
+    if(errors.email){
+      errors.email = 'User with that email already exists',
+      err.message = 'User already exists',
+      err.status = 500}
+    if(errors.username){
+      errors.username = 'User with that username already exists',
+      err.message = 'User already exists',
+      err.status = 500
+    }
     err.title = 'Validation error';
     err.errors = errors;
   }
@@ -63,9 +72,9 @@ app.use((err, _req, _res, next) => {
 
 // Error formatter
 app.use((err, _req, res, _next) => {
-  if(err.message === 'Forbidden'){res.status(403)} else {
+  if(err.message === 'Forbidden'){res.status(403)} 
+  else {
   res.status(err.status || 500)};
-  console.error(err);
   res.json({
     title: err.title || 'Server Error',
     message: err.message,

@@ -1,18 +1,30 @@
 const express = require('express');
 const { Spot, SpotImage, Review, Booking, User, ReviewImage } = require('../../db/models');
-const { requireAuth } = require("../../utils/auth.js");
+const { requireAuth, spotReturn } = require("../../utils/auth.js");
+// const { spotReturn } = require("../../utils/auth.js");
 
 const router = express.Router();
 
 //READ **INCOMPLETE** - Get all spots
 //(missing previewImage and avgRating)
 router.get('/', async (req, res, next) => {
+
     try {
-        let findSpots = await Spot.findAll({
-            include: {model: SpotImage, attributes: ["url"]}
+        let array = []
+        const findSpots = await Spot.findAll({
+            // include: {model: SpotImage, attributes: ["url"]}
 
         })
-        res.json({ Spots: findSpots })
+        findSpots.forEach(async element => {
+            const findImg = function() {SpotImage.findOne({where: {spotId: element.id, preview: true}})}
+            // element.previewImg = "url",
+            console.log(findImg)
+            element.dataValues.avgRating = findImg.url
+            element._options.attributes.push('avgRating')
+            array.push(element)
+            console.log(element.dataValues)
+        });
+        res.json({ Spots: array[0] })
     } catch (error) {
         next(error)
     }
@@ -100,6 +112,19 @@ router.post('/', requireAuth, async (req, res, next) => {
         let createSpot = await Spot.create({ address, city, state, country, lat, lng, name, description, price, ownerId: req.user.id })
         res.json(createSpot)
     } catch (error) {
+        error.status = 400
+        error.message = "Validation error"
+        for (let err of error.errors) {
+            if(err.path === 'address'){err.message = "Street address is required"}
+            if(err.path === 'city'){err.message = "City is required"}
+            if(err.path === 'state'){err.message = "State is required"}
+            if(err.path === 'country'){err.message = "Country is required"}
+            if(err.path === 'lat'){err.message = "latitude is not valid"}
+            if(err.path === 'lng'){err.message = "Longitude is not valid"}
+            if(err.path === 'name'){err.message = "Name must be less than 50 characters"}
+            if(err.path === 'description'){err.message = "Description is required"}
+            if(err.path === 'price'){err.message = "Price per day is required"}
+          }
         next(error)
     }
 });
@@ -116,6 +141,7 @@ router.post('/:spotId/images', requireAuth, async (req, res, next) => {
         let id = createImage.id
         res.json({ id, url, preview })
     } catch (err) {
+        err.status = 404
         next(err)
     }
 })
@@ -165,6 +191,19 @@ router.put('/:spotId', requireAuth, async (req, res, next) => {
         }
         if (updateSpot.ownerId !== reqUser){throw new Error('Forbidden')}
     } catch (error) {
+        for (let err of error.errors) {
+            if(err.path === 'address'){err.message = "Street address is required"}
+            if(err.path === 'city'){err.message = "City is required"}
+            if(err.path === 'state'){err.message = "State is required"}
+            if(err.path === 'country'){err.message = "Country is required"}
+            if(err.path === 'lat'){err.message = "latitude is not valid"}
+            if(err.path === 'lng'){err.message = "Longitude is not valid"}
+            if(err.path === 'name'){err.message = "Name must be less than 50 characters"}
+            if(err.path === 'description'){err.message = "Description is required"}
+            if(err.path === 'price'){err.message = "Price per day is required"}
+          }
+          error.status = 400
+          error.message = "Validation error"
         next(error)
     }
 });

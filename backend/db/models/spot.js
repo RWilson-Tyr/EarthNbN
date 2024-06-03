@@ -26,28 +26,28 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       validate: {
-
+        notEmpty: true
       }
     },
     city: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-
+        notEmpty: true
       }
     },
     state: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-
+        notEmpty: true
       }
     },
     country: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-
+        notEmpty: true
       }
     },
     lat: {
@@ -76,12 +76,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
     },
     price: {
       type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
+        notEmpty: true,
         min: 1
       }
     }
