@@ -72,15 +72,17 @@ app.use((err, _req, _res, next) => {
 
 // Error formatter
 app.use((err, _req, res, _next) => {
-  if(err.message === 'Forbidden'){res.status(403)} 
-  else {
-  res.status(err.status || 500)};
-  res.json({
-    title: err.title || 'Server Error',
-    message: err.message,
-    errors: err.errors,
-    stack: isProduction ? null : err.stack
-  });
+  if(err.message === 'Forbidden'){res.status(403)}
+  if(err.message === "Invalid credentials"){res.status(401), res.json({message: err.message})}
+  else(res.status(err.status), res.json({message: err.message, errors: err.errors}))
+  // else {
+  // res.status(err.status || 500)};
+  // res.json({
+  //   title: err.title || 'Server Error',
+  //   message: err.message,
+  //   errors: err.errors,
+  //   stack: isProduction ? null : err.stack
+  // });
 });
 
 module.exports = app;

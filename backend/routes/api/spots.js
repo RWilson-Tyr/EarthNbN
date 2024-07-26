@@ -110,6 +110,7 @@ router.post('/', requireAuth, async (req, res, next) => {
     try {
         const { address, city, state, country, lat, lng, name, description, price } = req.body
         let createSpot = await Spot.create({ address, city, state, country, lat, lng, name, description, price, ownerId: req.user.id })
+        res.status(201)
         res.json(createSpot)
     } catch (error) {
         error.status = 400
@@ -139,6 +140,7 @@ router.post('/:spotId/images', requireAuth, async (req, res, next) => {
         if (req.user.id !== findSpot.ownerId) {throw new Error('Forbidden')}        
         const createImage = await SpotImage.create({ spotId, url, preview })
         let id = createImage.id
+        res.status(201)
         res.json({ id, url, preview })
     } catch (err) {
         err.status = 404

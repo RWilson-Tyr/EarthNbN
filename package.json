@@ -12,8 +12,8 @@
     "build": "npm run --prefix backend build"
   },
   "dependencies": {
+    "psql": "^0.0.1"
   },
-  "devDependencies": {},
   "keywords": [],
   "author": "",
   "license": "ISC"
