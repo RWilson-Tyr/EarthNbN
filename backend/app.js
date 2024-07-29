@@ -72,8 +72,11 @@ app.use((err, _req, _res, next) => {
 
 // Error formatter
 app.use((err, _req, res, _next) => {
-  if(err.message === 'Forbidden'){res.status(403)}
+  console.log(err)
+  if(err.message === "Forbidden"){res.status(403), res.json({message: err.message})}
   if(err.message === "Invalid credentials"){res.status(401), res.json({message: err.message})}
+  if(err.message === "Spot couldn't be found"){res.status(404), res.json({message: err.message})}
+  if(err.title){res.json({message: err.message, errors: err.errors})}
   else(res.status(err.status), res.json({message: err.message, errors: err.errors}))
   // else {
   // res.status(err.status || 500)};
