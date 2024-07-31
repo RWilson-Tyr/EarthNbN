@@ -55,6 +55,15 @@ app.use((err, _req, _res, next) => {
     for (let error of err.errors) {
       errors[error.path] = error.message;
     }
+    if(errors.email){
+      errors.email = 'User with that email already exists',
+      err.message = 'User already exists',
+      err.status = 500}
+    if(errors.username){
+      errors.username = 'User with that username already exists',
+      err.message = 'User already exists',
+      err.status = 500
+    }
     err.title = 'Validation error';
     err.errors = errors;
   }
@@ -63,15 +72,24 @@ app.use((err, _req, _res, next) => {
 
 // Error formatter
 app.use((err, _req, res, _next) => {
-  if(err.message === 'Forbidden'){res.status(403)} else {
-  res.status(err.status || 500)};
-  console.error(err);
-  res.json({
-    title: err.title || 'Server Error',
-    message: err.message,
-    errors: err.errors,
-    stack: isProduction ? null : err.stack
-  });
+  console.log(err)
+  if(err.message === "Forbidden"){res.status(403), res.json({message: err.message})}
+  else if(err.message === "Invalid credentials"){res.status(401), res.json({message: err.message})}
+  else if(err.message === "Spot couldn't be found"){res.status(404), res.json({message: err.message})}
+  else if(err.message === "User already exists"){res.status(500)}
+  else if(err.title === 'Authentication required'){res.status(401), res.json({message: err.message})}
+  // if(err.from === "Validate")
+  // if(err.title){res.json({message: err.message, errors: err.errors})}
+  
+  else(res.status(err.status), res.json({message: err.message, errors: err.errors}))
+  // else {
+  // res.status(err.status || 500)};
+  // res.json({
+  //   title: err.title || 'Server Error',
+  //   message: err.message,
+  //   errors: err.errors,
+  //   stack: isProduction ? null : err.stack
+  // });
 });
 
 module.exports = app;

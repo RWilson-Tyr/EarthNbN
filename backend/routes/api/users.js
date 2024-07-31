@@ -12,6 +12,10 @@ const validateSignup = [
     .exists({ checkFalsy: true })
     .isEmail()
     .withMessage('Please provide a valid email.'),
+  check('email')
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage('Invalid email'),
   check('username')
     .exists({ checkFalsy: true })
     .isLength({ min: 4 })
@@ -24,6 +28,14 @@ const validateSignup = [
     .exists({ checkFalsy: true })
     .isLength({ min: 6 })
     .withMessage('Password must be 6 characters or more.'),
+  check('firstName')
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage('First name is required'),
+  check('lastName')
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage('Last name is required'),
   handleValidationErrors
 ];
 
@@ -42,11 +54,12 @@ router.post('/', validateSignup, async (req, res, next) => {
     };
     await setTokenCookie(res, safeUser);
 
-    return res.json({
+    return res.status(201), res.json({
       user: safeUser
     });
 
   } catch (error) {
+    error.status = 500
     next(error)
   }
 });

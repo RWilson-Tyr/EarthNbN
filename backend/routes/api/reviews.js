@@ -26,14 +26,19 @@ router.get('/current', requireAuth, async (req, res, next) => {
 router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
     try {
         const {url} = req.body
-        let reviewId = parseInt(req.params.reviewId)
-        const findReview = await Review.findOne({where: reviewId})
-        if(!reviewId){throw new Error("Review couldn't be found")}
+        let reviewNum = parseInt(req.params.reviewId)
+        const findReview = await Review.findByPk(reviewNum)
+        if(!findReview){throw new Error("Review couldn't be found")}
         if(req.user.id !== findReview.userId) {throw new Error('Forbidden')}
-        let createImage = await ReviewImage.create({url, reviewId})
+        const imageCount = await ReviewImage.findAll({where: {reviewId: reviewNum}})
+        if(imageCount.length >= 10){throw new Error("Maximum number of images for this resource was reached")}
+        let createImage = await ReviewImage.create({url, reviewId: reviewNum})
         let returnNewImage = await ReviewImage.findAll({where: {id: createImage.id}, attributes: {exclude: ['reviewId', 'createdAt', 'updatedAt']}})
         res.json(...returnNewImage)
     } catch (err) {
+        console.log(err)
+        if (err.message === "Review couldn't be found"){ err.status = 404}
+        if(err.message === "Maximum number of images for this resource was reached"){ err.status = 403}
         next(err)
     }
 })
@@ -49,6 +54,8 @@ router.put('/:reviewId', requireAuth, async (req, res, next) => {
         const updateReview = await findReview.update({ review, stars })
         res.json(updateReview)
     } catch (err) {
+        if(err.message === "Review couldn't be found"){ err.status = 404}
+        else{err.status = 400}
         next(err)
     }
 })
@@ -63,6 +70,7 @@ router.delete('/:reviewId', requireAuth, async (req, res, next) => {
         await Review.destroy({where: {id: reviewId}})
         res.json({ message: "Successfully deleted" })
     } catch (err) {
+        if(err.message === "Review couldn't be found"){ err.status = 404}
         next(err)
     }
 })
