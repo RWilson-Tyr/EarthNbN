@@ -9,10 +9,10 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
     try {
         const imageId = parseInt(req.params.imageId)
         const reqUser = parseInt(req.user.id)
-        const findImage = await ReviewImage.findAll({where: {id: imageId}})
-        console.log(findImage)
-        if(!findImage[0]){res.json({message: "Review Image couldn't be found"})}
-        const findOwner = await Review.findAll({where: {id: findImage[0].reviewId}})
+        const findImage = await ReviewImage.findByPk(imageId)
+        if(!findImage){res.json({message: "Review Image couldn't be found"})}
+        const findOwner = await Review.findAll({where: {id: findImage.reviewId}})
+        console.log(findOwner)
         if(reqUser === findOwner[0].id){
             await ReviewImage.destroy({where: {id: imageId}})
             res.json({message: "successfully deleted"})
