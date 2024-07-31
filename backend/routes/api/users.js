@@ -59,6 +59,7 @@ router.post('/', validateSignup, async (req, res, next) => {
     });
 
   } catch (error) {
+    error.status = 500
     next(error)
   }
 });

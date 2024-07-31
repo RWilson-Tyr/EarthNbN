@@ -108,11 +108,11 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
 router.post('/', requireAuth, async (req, res, next) => {
     try {
         const { address, city, state, country, lat, lng, name, description, price } = req.body
-        let createSpot = await Spot.create({ address, city, state, country, lat, lng, name, description, price, ownerId: req.user.id })
+        let createSpot = await Spot.create({ address, city, state, country, lat, lng, name, description, price})
         res.status(201)
         res.json(createSpot)
     } catch (error) {
-        error.status = 400
+        error.status(400)
         error.message = "Validation error"
         for (let err of error.errors) {
             if(err.path === 'address'){err.message = "Street address is required"}
