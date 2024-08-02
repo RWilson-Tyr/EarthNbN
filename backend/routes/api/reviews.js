@@ -9,12 +9,13 @@ const router = express.Router();
 //need preview image in spots
 router.get('/current', requireAuth, async (req, res, next) => {
     try {
+        console.log(req.user.id)
         let findReviews = await Review.findAll({
+            where: { userId: req.user.id },
             include: [{model: User, attributes: {exclude: ['username', 'email', 'hashedPassword', 'createdAt', 'updatedAt']}}, 
             {model: Spot, attributes: {exclude: ['description', 'createdAt', 'updatedAt']}}, 
             {model: ReviewImage, attributes: {exclude: ['reviewId', 'createdAt', 'updatedAt']}}
-            ],
-            where: { userId: req.user.id }
+            ]
         })
         res.json({ Reviews: findReviews })
     } catch (err) {

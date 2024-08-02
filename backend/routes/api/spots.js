@@ -4,7 +4,7 @@ const { requireAuth, spotReturn } = require("../../utils/auth.js");
 // const { spotReturn } = require("../../utils/auth.js");
 
 const router = express.Router();
-
+const today = new Date()
 //READ **INCOMPLETE** - Get all spots
 //(missing previewImage and avgRating)
 router.get('/', async (req, res, next) => {
@@ -93,10 +93,10 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
         let spotId = parseInt(req.params.spotId)
         let isSpot = await Spot.findByPk(spotId)
         if(!isSpot){throw new Error("Spot couldn't be found")}
-        let ownerFindAll = await Booking.findAll({ where: spotId, include: {model: User, attributes: {exclude: ['username', 'email', 'hashedPassword', 'createdAt', 'updatedAt']}}})
+        let ownerFindAll = await Booking.findAll({ where: {spotId}, include: {model: User, attributes: {exclude: ['username', 'email', 'hashedPassword', 'createdAt', 'updatedAt']}}})
         let findAll = await Booking.findAll({where: {spotId},attributes: {exclude: ['id', 'userId', 'createdAt', 'updatedAt']}})
         if(!findAll){throw new Error("no bookings found for this spot!")}
-        if(reqUser === spotId){
+        if(reqUser === isSpot.ownerId){
         res.json({Bookings: ownerFindAll})}
         else {
             res.json({Bookings: findAll})
@@ -174,13 +174,40 @@ router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
 router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
     try {
         const { startDate, endDate } = req.body
+        if(startDate < today.toISOString().slice(0, 10)){throw new Error("startDate cannot be before today's date")}
+        if(endDate < today.toISOString().slice(0, 10)){throw new Error("endDate cannot be before today's date")}
+        if(endDate < startDate){throw new Error("endDate is before startDate")}
         const spotId = parseInt(req.params.spotId)
         let findSpot = await Spot.findByPk(spotId)
+        let allBookings = await Booking.findAll({ where: { spotId } })
         if(!findSpot){throw new Error("Spot couldn't be found")}
+        if(findSpot){
+            for (book of allBookings){
+                let currBookingStart = book.startDate.toISOString().slice(0, 10)
+                let currBookingEnd = book.endDate.toISOString().slice(0, 10)
+                    if(currBookingStart <= startDate && startDate <= currBookingEnd){
+                        throw new Error("Booking already scheduled for this time. StartDate falls in a previous booking")
+                    }
+                    if(currBookingStart <= endDate && endDate <= currBookingEnd){
+                        throw new Error("Booking already scheduled for this time. EndDate falls in a previous booking")
+                    }
+                    if(startDate < currBookingStart && endDate > currBookingEnd){
+                        throw new Error("There is already a booking scheduled within this timeframe.")
+                    }
+                    if(startDate === currBookingStart || endDate === currBookingEnd){
+                        throw new Error("There is already a booking scheduled within this timeframe.")
+                    }
+            }}
         let createBooking = await Booking.create({ spotId, userId: req.user.id, startDate, endDate })
         let finBooking = {id: createBooking.id, spotId, userId: req.user.id, startDate, endDate, createdAt: createBooking.createdAt, updatedAt: createBooking.updatedAt}
         res.json(finBooking)
     } catch (err) {
+        if(err.message === "startDate cannot be before today's date"){err.status = 404}
+        if(err.message === "endDate cannot be before today's date"){err.status = 404}
+        if(err.message === "Booking already scheduled for this time. StartDate falls in a previous booking"){err.status = 404}
+        if(err.message === "Booking already scheduled for this time. EndDate falls in a previous booking"){err.status = 404}
+        if(err.message === "endDate is before startDate"){err.status = 404}
+        if(err.message === "There is already a booking scheduled within this timeframe."){err.status = 404}
         next(err)
     }
 })
