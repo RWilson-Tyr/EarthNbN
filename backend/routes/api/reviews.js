@@ -5,11 +5,9 @@ const { requireAuth } = require("../../utils/auth.js");
 
 const router = express.Router();
 
-//READ **INCOMPLETE** - reviews by current user
-//need preview image in spots
+//READ - reviews by current user
 router.get('/current', requireAuth, async (req, res, next) => {
     try {
-        console.log(req.user.id)
         let findReviews = await Review.findAll({
             where: { userId: req.user.id },
             include: [{model: User, attributes: {exclude: ['username', 'email', 'hashedPassword', 'createdAt', 'updatedAt']}}, 
@@ -23,7 +21,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
     }
 })
 
-//CREATE **COMPLETE** - Add image to a review based on Review ID
+//CREATE - Add image to a review based on Review ID
 router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
     try {
         const {url} = req.body
@@ -37,14 +35,13 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
         let returnNewImage = await ReviewImage.findAll({where: {id: createImage.id}, attributes: {exclude: ['reviewId', 'createdAt', 'updatedAt']}})
         res.json(...returnNewImage)
     } catch (err) {
-        console.log(err)
         if (err.message === "Review couldn't be found"){ err.status = 404}
         if(err.message === "Maximum number of images for this resource was reached"){ err.status = 403}
         next(err)
     }
 })
 
-//UPDATE **COMPLETE**
+//UPDATE
 router.put('/:reviewId', requireAuth, async (req, res, next) => {
     try {
         let { review, stars } = req.body
@@ -61,7 +58,7 @@ router.put('/:reviewId', requireAuth, async (req, res, next) => {
     }
 })
 
-//DELETE **INCOMPLETE**
+//DELETE
 router.delete('/:reviewId', requireAuth, async (req, res, next) => {
     try {
         const reviewId = parseInt(req.params.reviewId)

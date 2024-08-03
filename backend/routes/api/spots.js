@@ -5,8 +5,9 @@ const { requireAuth, spotReturn } = require("../../utils/auth.js");
 
 const router = express.Router();
 const today = new Date()
-//READ **INCOMPLETE** - Get all spots
-//(missing previewImage and avgRating)
+
+
+//READ - Get all spots
 router.get('/', async (req, res, next) => {
 
     try {
@@ -15,39 +16,66 @@ router.get('/', async (req, res, next) => {
             // include: {model: SpotImage, attributes: ["url"]}
 
         })
-        findSpots.forEach(async element => {
-            const findImg = function() {SpotImage.findOne({where: {spotId: element.id, preview: true}})}
-            // element.previewImg = "url",
-            element.dataValues.avgRating = findImg.url
-            element._options.attributes.push('avgRating')
-            array.push(element)
-        });
+        let totalStars = 0;
+        let totalReviews = 0;
+        for(spot of findSpots){
+            let findReviews = await Review.findAll({where: {spotId : spot.id}})
+            let findImg = await SpotImage.findAll({where: {spotId: spot.id, preview: 1}})
+
+                for(review of findReviews){ totalStars += review.stars, totalReviews++}
+
+            let avgRating = totalStars/totalReviews
+
+            spot.previewImage = findImg
+            spot.dataValues.avgRating = avgRating
+            spot.dataValues.previewImage = findImg[0].url
+            array.push(spot)
+            totalStars = 0;
+            totalReviews = 0;
+        }
         res.json({ Spots: array })
     } catch (error) {
         next(error)
     }
 });
 
-//READ **INCOMPLETE** - get all spots owned by current user
-//(missing previewImage and avgRating)
+//READ - get all spots owned by current user
 router.get('/current', requireAuth, async (req, res, next) => {
     try {
+        let array = []
         let findSpots = await Spot.findAll({
             where: {
                 ownerId: req.user.id
             }
         })
-        res.json({ Spots: findSpots })
+        let totalStars = 0;
+        let totalReviews = 0;
+        for(spot of findSpots){
+            let findReviews = await Review.findAll({where: {spotId : spot.id}})
+            let findImg = await SpotImage.findAll({where: {spotId: spot.id, preview: 1}})
+
+                for(review of findReviews){ totalStars += review.stars, totalReviews++}
+
+            let avgRating = totalStars/totalReviews
+            if(findReviews[0] === undefined){avgRating = 0}
+
+            spot.previewImage = findImg
+            spot.dataValues.avgRating = avgRating
+            spot.dataValues.previewImage = findImg[0].url
+            array.push(spot)
+            totalStars = 0;
+            totalReviews = 0;
+        }
+        res.json({ Spots: array })
     } catch (error) {
         next(error)
     }
 });
 
-//READ **INCOMPLETE** - get spot based on spot ID
-//need numReviews and avgStarRating
+//READ - get spot based on spot ID
 router.get('/:spotId', async (req, res, next) => {
     try {
-        const spotId = parseInt(req.params.spotId)
+        let spotId = parseInt(req.params.spotId)
         let ownerId = req.user.id
         let spots = await Spot.findOne({
             where: {id: spotId},
@@ -62,14 +90,25 @@ router.get('/:spotId', async (req, res, next) => {
             },]
         })
         if(!spots){throw new Error("Spot couldn't be found")}
+        let totalStars = 0;
+        let numReviews = 0;
+        let countReviews = await Review.findAll({where: {spotId: spotId}})
+            for(review of countReviews){
+                numReviews++
+                totalStars += review.stars
+            }
+        spots.dataValues.numReviews = numReviews
+        spots.dataValues.avgStarRating = totalStars/numReviews
+        if(isNaN(spots.dataValues.avgStarRating)){spots.dataValues.avgStarRating = 0}
+
+
         res.json(spots)
     } catch (err) {
-        // err.status(404)
         next(err)
     }
 });
 
-//READ **COMPLETE** - reviews based on SpotId
+//READ - reviews based on SpotId
 router.get('/:spotId/reviews', async (req, res, next) => {
     try {
         let spotId = parseInt(req.params.spotId)
@@ -86,7 +125,7 @@ router.get('/:spotId/reviews', async (req, res, next) => {
     }
 })
 
-//READ **COMPLETE** - all bookings based on SpotId
+//READ - all bookings based on SpotId
 router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
     try {
         let reqUser = parseInt(req.user.id)
@@ -106,7 +145,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
     }
 })
 
-//CREATE **COMPLETED** - create a spot
+//CREATE - create a spot
 router.post('/', requireAuth, async (req, res, next) => {
     try {
         const { address, city, state, country, lat, lng, name, description, price } = req.body
@@ -131,7 +170,7 @@ router.post('/', requireAuth, async (req, res, next) => {
     }
 });
 
-//CREATE **COMPLETED** - Add an image to spotId
+//CREATE - Add an image to spotId
 router.post('/:spotId/images', requireAuth, async (req, res, next) => {
     try {
         const { url, preview } = req.body
@@ -150,17 +189,14 @@ router.post('/:spotId/images', requireAuth, async (req, res, next) => {
 })
 
 
-//CREATE **COMPLETE** - review based on SpotId
+//CREATE - review based on SpotId
 router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
     try {
         const { review, stars } = req.body
-        // if((!review) || 5 < stars || stars < 1){throw new Error()}
-        // console.log(5 < stars || stars < 1)
         const spotId = parseInt(req.params.spotId)
         let findSpot = await Spot.findByPk(spotId)
         if(!findSpot){throw new Error("Spot couldn't be found")}
         let createReview = await Review.create({ spotId: spotId, userId: req.user.id, review, stars })
-        // if()(console.log("stars"))
         res.status(201)
         let finRev = {id: createReview.id, userId: req.user.id, spotId: spotId, review: review, stars: stars, createdAt: createReview.createdAt, updatedAt: createReview.updatedAt}
         res.json(finRev)
@@ -170,7 +206,7 @@ router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
     }
 })
 
-//CREATE **INCOMPLETE** - booking based on SpotId
+//CREATE - booking based on SpotId
 router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
     try {
         const { startDate, endDate } = req.body
@@ -200,19 +236,20 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
             }}
         let createBooking = await Booking.create({ spotId, userId: req.user.id, startDate, endDate })
         let finBooking = {id: createBooking.id, spotId, userId: req.user.id, startDate, endDate, createdAt: createBooking.createdAt, updatedAt: createBooking.updatedAt}
-        res.json(finBooking)
+        
+        res.status(201).json(finBooking)
     } catch (err) {
         if(err.message === "startDate cannot be before today's date"){err.status = 404}
         if(err.message === "endDate cannot be before today's date"){err.status = 404}
-        if(err.message === "Booking already scheduled for this time. StartDate falls in a previous booking"){err.status = 404}
-        if(err.message === "Booking already scheduled for this time. EndDate falls in a previous booking"){err.status = 404}
+        if(err.message === "Booking already scheduled for this time. StartDate falls in a previous booking"){err.status = 403}
+        if(err.message === "Booking already scheduled for this time. EndDate falls in a previous booking"){err.status = 403}
         if(err.message === "endDate is before startDate"){err.status = 404}
-        if(err.message === "There is already a booking scheduled within this timeframe."){err.status = 404}
+        if(err.message === "There is already a booking scheduled within this timeframe."){err.status = 403}
         next(err)
     }
 })
 
-//UPDATE **COMPLETED**
+//UPDATE
 router.put('/:spotId', requireAuth, async (req, res, next) => {
     try {
         const reqUser = req.user.id
@@ -220,7 +257,6 @@ router.put('/:spotId', requireAuth, async (req, res, next) => {
         if(isNaN(spotId)){throw new Error(`You have input /api/spots/${req.params.spotId}. ${req.params.spotId} is not a number`)}
         const { address, city, state, country, lat, lng, name, description, price } = req.body
         let updateSpot = await Spot.findOne({ where: { id: spotId } })
-        // console.log(updateSpot === null)
         if (updateSpot === null) {
             throw new Error("Spot couldn't be found") 
         }
@@ -249,7 +285,7 @@ router.put('/:spotId', requireAuth, async (req, res, next) => {
     }
 });
 
-//DELETE **COMPLETED**
+//DELETE
 router.delete('/:spotId', requireAuth, async (req, res, next) => {
     try {
         const { user } = req

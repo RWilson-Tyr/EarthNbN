@@ -72,23 +72,12 @@ app.use((err, _req, _res, next) => {
 
 // Error formatter
 app.use((err, _req, res, _next) => {
-  console.log(err.message)
   if(err.message === "Forbidden"){res.status(403), res.json({message: err.message})}
   else if(err.message === "Invalid credentials"){res.status(401), res.json({message: err.message})}
   else if(err.message === "Spot couldn't be found"){res.status(404), res.json({message: err.message})}
   else if(err.title === 'Authentication required'){res.status(401), res.json({message: err.message})}
-  // if(err.from === "Validate")
-  // if(err.title){res.json({message: err.message, errors: err.errors})}
   
   else(res.status(err.status), res.json({message: err.message, errors: err.errors}))
-  // else {
-  // res.status(err.status || 500)};
-  // res.json({
-  //   title: err.title || 'Server Error',
-  //   message: err.message,
-  //   errors: err.errors,
-  //   stack: isProduction ? null : err.stack
-  // });
 });
 
 module.exports = app;
