@@ -21,13 +21,15 @@ function Navigation({ isLoaded }){
     </>
   );
 
-  return (
+  return (<>
+    <div class="appName"><h1>Earth NbN</h1></div>
     <ul>
       <li>
         <NavLink to="/">Home</NavLink>
       </li>
       {isLoaded && sessionLinks}
     </ul>
+    </>
   );
 }
 

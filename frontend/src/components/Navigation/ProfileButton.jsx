@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-// import { FaUserCircle } from 'react-icons/fa';
+import { FaUserCircle } from 'react-icons/fa';
 import * as sessionActions from '../../store/session';
 import './Navigation.css'
 
@@ -37,7 +37,7 @@ function ProfileButton({ user }) {
   return (
     <>
       <button onClick={toggleMenu}>
-        {/* <FaUserCircle /> */}
+        <FaUserCircle />
       </button>
       <ul className={ulClassName} ref={ulRef}>
         <li>{user.username}</li>

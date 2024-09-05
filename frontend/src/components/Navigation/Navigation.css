@@ -5,3 +5,8 @@
 .show-menu{
     position: absolute;
 }
+
+.appName h1{
+    border: 5px;
+    border-color: red;
+}

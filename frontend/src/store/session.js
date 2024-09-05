@@ -22,7 +22,7 @@ export const login =
 
     if (res.ok) {
       res = await res.json();
-      dispatch(addUser(res));
+      dispatch(addUser(res.user));
       return res;
     }
   };
@@ -31,7 +31,7 @@ export const restoreUser = () => async (dispatch) => {
   let res = await csrfFetch("/api/session");
   if (res.ok) {
     res = await res.json();
-    dispatch(addUser(res));
+    dispatch(addUser(res.user));
     return res;
   }
 };
@@ -46,8 +46,7 @@ export const signUp =
 
     if (res.ok) {
       res = await res.json();
-      console.log(res)
-      dispatch(addUser(res));
+      dispatch(addUser(res.user));
       return res;
     }
   };
