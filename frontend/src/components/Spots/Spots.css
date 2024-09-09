@@ -1,0 +1,20 @@
+img{
+    width: 40%;
+}
+
+img:hover{
+    width: 60%;
+}
+
+.spots{
+    /* display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px; */
+    display:flex;
+    flex-wrap: wrap;
+    flex-shrink: 3;
+}
+
+/* .column{
+    flex: 25%;
+} */

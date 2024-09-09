@@ -1,12 +1,9 @@
-.hidden{
-    display: none;
+ul {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
 }
 
-.show-menu{
-    position: absolute;
-}
-
-.appName h1{
-    border: 5px;
-    border-color: red;
+.profile-dropdown {
+    display: block
 }

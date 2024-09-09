@@ -13,17 +13,17 @@ module.exports = {
     await SpotImage.bulkCreate([
       {
         spotId: 1,
-        url: "test1.url",
+        url: "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?cs=srgb&dl=pexels-binyaminmellish-186077.jpg&fm=jpg",
         preview: true
       },
       {
         spotId: 2,
-        url: "test2.url",
+        url: "https://www.houseplans.net/news/wp-content/uploads/2023/07/57260-768.jpeg",
         preview: true
       },
       {
         spotId: 3,
-        url: "test3.url",
+        url: "https://static.vecteezy.com/system/resources/thumbnails/023/308/330/small_2x/ai-generative-exterior-of-modern-luxury-house-with-garden-and-beautiful-sky-photo.jpg",
         preview: true
       },
     ], { validate: true });
