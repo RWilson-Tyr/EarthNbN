@@ -76,7 +76,6 @@ router.get('/current', requireAuth, async (req, res, next) => {
 router.get('/:spotId', async (req, res, next) => {
     try {
         let spotId = parseInt(req.params.spotId)
-        let ownerId = req.user.id
         let spots = await Spot.findOne({
             where: {id: spotId},
             include: [{

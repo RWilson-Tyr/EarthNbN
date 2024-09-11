@@ -11,9 +11,10 @@ import SignupFormModal from '../SignupFormModal/SignUpFormModal';
 function Navigation({ isLoaded }){
   const sessionUser = useSelector(state => state.session.user);
 
+
   const sessionLinks = sessionUser ? (
     <li>
-      <ProfileButton user={sessionUser} />
+      <ProfileButton user={sessionUser.firstName} />
     </li>
   ) : (
     <>
@@ -37,6 +38,9 @@ function Navigation({ isLoaded }){
     <ul>
       <li>
         <NavLink to="/">Earth NbN</NavLink>
+      </li>
+      <li>
+        <NavLink to="/spots/new">Create a new Spot</NavLink>
       </li>
       {isLoaded && sessionLinks}
     </ul></div>

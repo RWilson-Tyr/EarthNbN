@@ -12,7 +12,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await Spot.bulkCreate([
       {
-        ownerId: 2,
+        ownerId: 1,
         address: "1 main",
         city: "test city",
         state: "test state",
