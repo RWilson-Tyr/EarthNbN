@@ -6,9 +6,9 @@ import './LoginForm.css';
 
 function LoginFormModal() {
   const dispatch = useDispatch();
-  const [credential, setCredential] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
+  let [credential, setCredential] = useState("");
+  let [password, setPassword] = useState("");
+  let [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
   const handleSubmit = (e) => {
@@ -18,11 +18,23 @@ function LoginFormModal() {
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
-        if (data && data.errors) {
-          setErrors(data.errors);
+        if (data?.message) {
+          setErrors({message : data.message.value});
+          // console.log("ERRORS",errors)
         }
+        return setErrors({
+          InvalidCredentials: "The provided credentials were invalid"
+        });
       });
   };
+
+  const demoLogin = (e) => {
+    e.preventDefault()
+    credential = "Demo-lition"
+    password = "password"
+    return dispatch(sessionActions.login({ credential, password }))
+      .then(closeModal)
+  }
 
   return (
     <>
@@ -51,6 +63,12 @@ function LoginFormModal() {
         )}
         <button type="submit">Log In</button>
       </form>
+      {errors.InvalidCredentials && (
+        <p>{errors.InvalidCredentials}</p>
+      )}
+      <button type="demo" onClick={demoLogin}>
+        Log in as Demo User
+      </button>
     </>
   );
 }

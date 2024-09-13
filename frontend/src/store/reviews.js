@@ -7,24 +7,28 @@ export const getReviews = (reviews) => {
   }
 };
 
-export const getAllReviews = () => async dispatch => {
-    let res = await fetch("../../../api/reviews")
+export const getAllReviews = (spotId) => async dispatch => {
+  console.log("RES", spotId.spotId)
+    let res = await fetch(`/api/spots/${spotId.spotId}/reviews`)
 
     if(res.ok){
       res = await res.json()
-      console.log("RES", res)
       dispatch(getReviews(res))
       return res
     }
   }
 
-  const initalState = {reviews: [], isLoading: true}
+  const initalState = {reviews: []}
 
   const reviewsReducer = (state = initalState, action) => {
+    console.log("REVIEW ACTION", action)
     switch (action.type) {
-      case REVIEWS:
-        return {...state, reviews: [...action.reviews]}
-    
+      case REVIEWS:{
+        console.log("REVIEWS ACTION", action)
+        const newState = { ...state };
+        newState.reviews = action.reviews;
+        return newState;
+      }
       default:
         return state
     }

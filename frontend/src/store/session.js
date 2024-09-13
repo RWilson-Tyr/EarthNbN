@@ -23,6 +23,7 @@ export const login =
     if (res.ok) {
       res = await res.json();
       dispatch(addUser(res.user));
+      console.log(res)
       return res;
     }
   };
@@ -37,11 +38,12 @@ export const restoreUser = () => async (dispatch) => {
 };
 
 export const signUp =
-  ({ email, username, password }) =>
+  ({ email, username, password, firstName, lastName }) =>
   async (dispatch) => {
+    console.log(email, username, password)
     let res = await csrfFetch("/api/users", {
       method: "POST",
-      body: JSON.stringify({ email, username, password }),
+      body: JSON.stringify({ email, username, password, firstName, lastName }),
     });
 
     if (res.ok) {

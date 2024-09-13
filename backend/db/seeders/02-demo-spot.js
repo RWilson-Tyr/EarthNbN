@@ -47,6 +47,18 @@ module.exports = {
         description: "test description3",
         price: 50.99
       },
+      {
+        ownerId: 1,
+        address: "2",
+        city: "dsf",
+        state: "afs",
+        country: "asf",
+        lat: 30.7,
+        lng: -95.0,
+        name: "sednbe",
+        description: "sgSg regszdfg rg",
+        price: 50
+      },
     ], { validate: true });
   },
 

@@ -20,7 +20,7 @@ function SignupFormModal() {
     if (password === confirmPassword) {
       setErrors({});
       return dispatch(
-        sessionActions.signup({
+        sessionActions.signUp({
           email,
           username,
           firstName,
@@ -31,15 +31,23 @@ function SignupFormModal() {
         .then(closeModal)
         .catch(async (res) => {
           const data = await res.json();
+          console.log(data)
           if (data?.errors) {
             setErrors(data.errors);
           }
         });
     }
-    return setErrors({
-      confirmPassword: "Confirm Password field must be the same as the Password field"
-    });
+    return errors
   };
+
+  const buttonDisable = () => {
+    if(!email || !username || !firstName || !lastName || !password|| !confirmPassword){return true}
+    else if(username.length < 4){return true}
+    else if(password.length < 6){return true}
+    else{ return false}
+  }
+
+  let condition = buttonDisable()
 
   return (
     <>
@@ -107,7 +115,9 @@ function SignupFormModal() {
         {errors.confirmPassword && (
           <p>{errors.confirmPassword}</p>
         )}
-        <button type="submit">Sign Up</button>
+
+        <button disabled={condition} type="submit" 
+        >Sign Up</button>
       </form>
     </>
   );

@@ -1,12 +1,17 @@
 import { useEffect, useState } from 'react';
 import * as spotActions from '../../store/spots';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useNavigate} from 'react-router-dom';
 import "./ManageSpots.css"
+import DeleteSpotModal from '../DeleteSpotModal/DeleteSpotModal';
+import OpenModalButton from '../OpenModalButton';
+
 
 function ManageSpot() {
   const dispatch = useDispatch();
   const spots = useSelector(state => state.spotsReducer.curr)
+  // console.log(useSelector(user=>user.session.user))
+  let navigate = useNavigate()
 
   useEffect(() => {
     const unsub = async () => {
@@ -17,15 +22,29 @@ function ManageSpot() {
     }
   }, [dispatch])
 
-//   console.log(spots)
-
   return (
     <>
       <h1>Manage Your Spots</h1>
-      <div >
-        {/* <p>{spots ? spots : "loading"}</p> */}
-        <p>manage spots here</p>
-      </div>
+    {spots ? <div >
+      {spots.map(spot => (
+        <div key={spot.id} className="column">
+            <NavLink to={`/spots/${spot.id}`}>
+              <img src={`${spot.SpotImages[0].url}`}></img>
+              <p>{spot.city}, {spot.state} {spot.avgRating} <br></br>{spot.price} per night</p>
+
+            </NavLink>
+            <button onClick={()=>navigate(`/spots/${spot.id}/edit`)}>Update</button>
+            {/* {console.log(spot.SpotImages[0].url)}{console.log(spot.ownerId)} */}
+            <OpenModalButton
+          buttonText="Delete"
+          modalComponent={<DeleteSpotModal spotId={spot.id} />}
+        />
+          </div>
+        ))}
+      </div> :  <div>
+        <button onClick={navigate(`/spots/new`)}></button>
+        </div>}
+      
     </>
   );
 }

@@ -26,6 +26,11 @@ module.exports = {
         url: "https://static.vecteezy.com/system/resources/thumbnails/023/308/330/small_2x/ai-generative-exterior-of-modern-luxury-house-with-garden-and-beautiful-sky-photo.jpg",
         preview: true
       },
+      {
+        spotId: 4,
+        url: "https://res.cloudinary.com/brickandbatten/images/f_auto,q_auto/v1675439478/wordpress_assets/SmallHouseExteriors-Twitter-card-B-LOGO/SmallHouseExteriors-Twitter-card-B-LOGO.jpg?_i=AA",
+        preview: true
+      },
     ], { validate: true });
   },
 

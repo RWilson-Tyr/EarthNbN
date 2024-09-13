@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import * as spotActions from '../../store/spots';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import "./Spots.css"
 
+
 function Spots() {
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const spots = useSelector(state => state.spotsReducer.spots)
 
@@ -16,6 +18,7 @@ function Spots() {
       unsub()
     }
   }, [dispatch])
+  
 
   return (
     <>
@@ -24,12 +27,14 @@ function Spots() {
         {spots.map(spot => (
           <div key={spot.id} className="column">
             <NavLink to={`/spots/${spot.id}`}>
-              <img src={`${spot.previewImage}`}></img>
+            <span className="tooltiptext">{spot.name}</span>
+              <img src={`${spot.previewImage.url}`}></img>
               <p>{spot.city}, {spot.state} {spot.avgRating} <br></br>{spot.price} per night</p>
-
+            
             </NavLink>
           </div>
         ))}
+        <button onClick={()=>navigate('/current')}>Manage</button>
       </div>
     </>
   );

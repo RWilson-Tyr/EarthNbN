@@ -1,20 +1,37 @@
-img{
+.column img{
     width: 40%;
 }
 
-img:hover{
+.column img:hover{
     width: 60%;
+}
+.column .tooltiptext{
+    visibility: hidden;
+    position: absolute;
+  z-index: 1;
+}
+
+.column:hover .tooltiptext{
+    visibility: visible
 }
 
 .spots{
-    /* display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px; */
     display:flex;
     flex-wrap: wrap;
-    flex-shrink: 3;
+    /* justify-content: space-between; */
 }
 
-/* .column{
+.column{
+    display: flex;
     flex: 25%;
-} */
+    /* max-width: 25%; */
+    border: solid 5px red;
+    padding: 3px;
+    align-items: center;
+    justify-self: center;
+}
+
+.column > *{
+    display: flex;
+    justify-content: center;
+}

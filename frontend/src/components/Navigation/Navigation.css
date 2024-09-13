@@ -11,3 +11,7 @@ ul {
 button:hover{
     cursor: pointer;
 }
+
+.earthLogo{
+    width: 50px;
+}
