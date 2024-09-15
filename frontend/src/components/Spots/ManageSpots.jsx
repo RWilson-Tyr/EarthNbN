@@ -15,8 +15,7 @@ function ManageSpot() {
 
   useEffect(() => {
     const unsub = async () => {
-      if(user){
-      dispatch(spotActions.getCurrent())} else {return}
+      dispatch(spotActions.getCurrent())
     }
     return () => {
       unsub()
