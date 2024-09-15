@@ -20,12 +20,8 @@ function Spots() {
       unsub()
     }
   }, [dispatch])
-  
 
-  return (
-    <>
-      <div className="spots">
-        {spots.map(spot => (
+let findSpots = (spots.map(spot => (
           <div key={spot.id} className="spotContainer">
             <NavLink to={`/spots/${spot.id}`}>
             <span className="tooltiptext">{spot.name}</span>
@@ -33,7 +29,13 @@ function Spots() {
             </NavLink>
               <p>{spot.city}, {spot.state} {star}{Math.round(spot.avgRating * 100)/100} <br></br>{spot.price} per night</p>
           </div>
-        ))}
+        )))
+  
+
+  return (
+    <>
+      <div className="spots">
+        {spots ? findSpots : ""}
         <button onClick={()=>navigate('/current')}>Manage</button>
       </div>
     </>
