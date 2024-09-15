@@ -25,7 +25,6 @@ function Spots() {
 
 let findSpots = (spots.map(spot => (
   <div key={spot.id} className="spotContainer" >
-    {/* {console.log(spot.id)} */}
             <NavLink to={`/spots/${spot.id}`} id={spot.id}>
             <span className="tooltiptext">{spot.name}</span>
               {/* <img src={`${spot.previewImage.url}`}></img> */}
