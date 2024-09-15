@@ -43,7 +43,7 @@ if(spots){
     <>
       <h1>Manage Your Spots</h1>
     {spots ? <div className="spots">
-      {spots ? findSpots : ""}
+      {findSpots}
       </div> :  <div>
         <button onClick={navigate(`/spots/new`)}></button>
         </div>}
