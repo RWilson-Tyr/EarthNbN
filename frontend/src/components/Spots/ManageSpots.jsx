@@ -10,7 +10,6 @@ import OpenModalButton from '../OpenModalButton';
 function ManageSpot() {
   const dispatch = useDispatch();
   const spots = useSelector(state => state.spotsReducer.curr)
-  // console.log(useSelector(user=>user.session.user))
   let navigate = useNavigate()
 
   useEffect(() => {
@@ -25,16 +24,15 @@ function ManageSpot() {
   return (
     <>
       <h1>Manage Your Spots</h1>
-    {spots ? <div >
+    {spots ? <div className="spots">
       {spots.map(spot => (
-        <div key={spot.id} className="column">
+        <div key={spot.id} className="spotContainer">
             <NavLink to={`/spots/${spot.id}`}>
+            <span className="tooltiptext">{spot.name}</span>
               <img src={`${spot.SpotImages[0].url}`}></img>
-              <p>{spot.city}, {spot.state} {spot.avgRating} <br></br>{spot.price} per night</p>
-
             </NavLink>
+              <p>{spot.city}, {spot.state} {spot.avgRating} <br></br>{spot.price} per night</p>
             <button onClick={()=>navigate(`/spots/${spot.id}/edit`)}>Update</button>
-            {/* {console.log(spot.SpotImages[0].url)}{console.log(spot.ownerId)} */}
             <OpenModalButton
           buttonText="Delete"
           modalComponent={<DeleteSpotModal spotId={spot.id} />}

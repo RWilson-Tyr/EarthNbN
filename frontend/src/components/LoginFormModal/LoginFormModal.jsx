@@ -20,7 +20,7 @@ function LoginFormModal() {
         const data = await res.json();
         if (data?.message) {
           setErrors({message : data.message.value});
-          // console.log("ERRORS",errors)
+
         }
         return setErrors({
           InvalidCredentials: "The provided credentials were invalid"

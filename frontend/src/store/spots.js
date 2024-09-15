@@ -51,7 +51,7 @@ export const updateSpot = ({
   name,
   description,
   price }, spot) =>
-  async (dispatch) => { console.log("SPOTID",spot.spotid)
+  async (dispatch) => {
     let res = await csrfFetch(`/api/spots/${spot.spotid}`, {
       method: "PUT",
       body: JSON.stringify({
@@ -177,11 +177,9 @@ export const createSpot = ({
 const initalState = { spots: [], curr: [] }
 
 const spotsReducer = (state = initalState, action) => {
-  console.log("ACTION TYPE", action)
   switch (action.type) {
     case SPOTS:
       {
-        console.log("SPOTS ACTION", action)
         const newState = { ...state };
         newState.spots = action.spots;
         return newState;
@@ -200,7 +198,6 @@ const spotsReducer = (state = initalState, action) => {
       }
     case CURR: 
       {
-        console.log("CURR ACTION", action)
         const newState = { ...state };
         newState.curr = action.curr;
         return newState;

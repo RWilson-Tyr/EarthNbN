@@ -6,8 +6,8 @@ import './ReviewModal.css';
 
 function ReviewModal(spotId) {
   const dispatch = useDispatch();
-  const [review, setReview] = useState("Leave your review here...");
-  const [stars, setStars] = useState(3);
+  const [review, setReview] = useState("");
+  const [stars, setStars] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
@@ -25,6 +25,13 @@ function ReviewModal(spotId) {
       });
   };
 
+  
+  let checkCondition = () => {
+    if(review.length >= 10 && (stars > 0 && stars < 6)){return false}
+    else {return true}
+  }
+  let condition = checkCondition()
+
   return (
     <>
       <h1>How was your stay?</h1>
@@ -35,6 +42,7 @@ function ReviewModal(spotId) {
             value={review}
             onChange={(e) => setReview(e.target.value)}
             required
+            placeholder='Leave your review here...'
           />
         </label>
         <label>
@@ -42,13 +50,16 @@ function ReviewModal(spotId) {
             type="number"
             value={stars}
             onChange={(e) => setStars(e.target.value)}
+            max="5"
+            min="1"
             required
+            placeholder='Input the amout of stars (1-5)'
           />
         </label>
         {/* {errors.xxxx && (
           <p>{errors.xxxx}</p>
         )} */}
-        <button type="submit">Submit Your Review</button>
+        <button disabled={condition} type="submit">Submit Your Review</button>
       </form>
     </>
   );

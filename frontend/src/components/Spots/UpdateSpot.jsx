@@ -40,7 +40,7 @@ function UpdateSpot() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // console.log(spotId)
+
         return dispatch(
             spotActions.updateSpot({
                 address,

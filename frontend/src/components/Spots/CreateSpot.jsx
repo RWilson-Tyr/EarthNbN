@@ -48,40 +48,15 @@ function CreateSpot() {
     };
 
   return (
-    <>
+    <><div>
+      <div className='partone'>
     <h1>Create a New Spot</h1>
+    <h3>Where's your place located?</h3>
+    <caption>Guests will only get your exact address once they booked a reservation.</caption>
+    </div>
     <form onSubmit={handleSubmit}>
-      <label>
-        Address
-        <input
-          type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          required
-        />
-      </label>
-      {/* {errors.address && <p>{errors.address}</p>} */}
-      <label>
-        City
-        <input
-          type="text"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          required
-        />
-      </label>
-      {/* {errors.city && <p>{errors.city}</p>} */}
-      <label>
-        State
-        <input
-          type="text"
-          value={state}
-          onChange={(e) => setState(e.target.value)}
-          required
-        />
-      </label>
-      {/* {errors.state && <p>{errors.state}</p>} */}
-      <label>
+    <div className="formsectionone">
+    <label className='country'>
         Country
         <input
           type="text"
@@ -91,7 +66,36 @@ function CreateSpot() {
         />
       </label>
       {/* {errors.country && <p>{errors.country}</p>} */}
-      <label>
+      <label className='address'>
+        Address
+        <input
+          type="text"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          required
+        />
+      </label>
+      {/* {errors.address && <p>{errors.address}</p>} */}
+      <label calssName='city'>
+        City
+        <input
+          type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          required
+        />
+      </label>
+      {/* {errors.city && <p>{errors.city}</p>} */}
+      <label className='state'>
+        State
+        <input
+          type="text"
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+          required
+        />
+      </label>
+      <label className='lat'>
         Latitude
         <input
           type="number"
@@ -101,7 +105,7 @@ function CreateSpot() {
         />
       </label>
       {/* {errors.lat && <p>{errors.lat}</p>} */}
-      <label>
+      <label className='lng'>
         Longitude
         <input
           type="number"
@@ -111,40 +115,90 @@ function CreateSpot() {
         />
       </label>
       {/* {errors.lng && <p>{errors.lng}</p>} */}
-      <label>
-        Name
+
+      </div>
+      <div className='formsectiontwo'>
+        <h3>Describe your place to guests</h3>
+        <caption>Mention the best features of you space, any special amentities like fast wifi or parking, and what you love about the neighborhood.</caption>
+        <label className='description'>
+        <textarea
+          className='decriptionInput'
+          placeholder='Please write at least 30 characters'
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+          rows
+        />
+      </label>
+      {/* {errors.description && <p>{errors.description}</p>} */}
+      </div>
+      <div className='formsectionthree'>
+        <h3>Create a title for your spot</h3>
+        <caption>Catch guests' attention with a spot title that highlights what makes your place special.</caption>
+        <label className='name'>
         <input
           type="text"
+          placeholder='Name of your spot'
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
         />
       </label>
       {/* {errors.name && <p>{errors.name}</p>} */}
-      <label>
-        Description
+      </div>
+      <div className='formsectionfour'>
+        <h3>Set a base price for your spot</h3>
+        <caption>Competitive pricing can help your listing stand out and rank higher in search results.</caption>
+        <label className='price'>
         <input
-          type="text"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
-      </label>
-      {/* {errors.description && <p>{errors.description}</p>} */}
-      <label>
-        Price
-        <input
+          placeholder='Price per night (USD)'
           type="number"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           required
         />
-      </label>
-      {/* {errors.price && <p>{errors.price}</p>} */}
+        </label>
+        {/* {errors.price && <p>{errors.price}</p>} */}
+      </div>
+      <div className='formsectionfive'>
+        <h3>Liven up your spot with photos</h3>
+        <label>
+          <input
+          className='img1'
+            placeholder='Preview Image URL'
+            type='text'
+            required
+          />
+          <input
+          className='img2'
+            placeholder='Image URL'
+            type='text'
+          />
+          <input
+          className='img3'
+            placeholder='Image URL'
+            type='text'
+          />
+          <input
+          className='img4'
+            placeholder='Image URL'
+            type='text'
+          />
+          <input
+          className='img5'
+            placeholder='Image URL'
+            type='text'
+          />
+        </label>
+      </div>
+      <div className='submitButton'>
       <button type="submit">
       Create Spot
       </button>
-    </form>
+      </div>
+      </form>
+    </div>
   </>
   )
 }

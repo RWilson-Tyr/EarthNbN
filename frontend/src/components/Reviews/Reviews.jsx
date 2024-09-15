@@ -20,9 +20,6 @@ function Reviews() {
         unsub()
       }
     }, [dispatch])
-
-    // console.log(reviews.Reviews[0].id)
-  console.log(reviews)
   
     return (
       <>

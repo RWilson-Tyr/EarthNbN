@@ -3,12 +3,14 @@ import * as spotActions from '../../store/spots';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 import "./Spots.css"
+import { AiFillStar } from 'react-icons/ai';
 
 
 function Spots() {
   const navigate = useNavigate()
   const dispatch = useDispatch();
   const spots = useSelector(state => state.spotsReducer.spots)
+  const star = AiFillStar()
 
   useEffect(() => {
     const unsub = async () => {
@@ -22,16 +24,14 @@ function Spots() {
 
   return (
     <>
-      <h1>SPOTS</h1>
       <div className="spots">
         {spots.map(spot => (
-          <div key={spot.id} className="column">
+          <div key={spot.id} className="spotContainer">
             <NavLink to={`/spots/${spot.id}`}>
             <span className="tooltiptext">{spot.name}</span>
               <img src={`${spot.previewImage.url}`}></img>
-              <p>{spot.city}, {spot.state} {spot.avgRating} <br></br>{spot.price} per night</p>
-            
             </NavLink>
+              <p>{spot.city}, {spot.state} {star}{Math.round(spot.avgRating * 100)/100} <br></br>{spot.price} per night</p>
           </div>
         ))}
         <button onClick={()=>navigate('/current')}>Manage</button>

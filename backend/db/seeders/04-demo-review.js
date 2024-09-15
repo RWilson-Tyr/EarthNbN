@@ -29,6 +29,18 @@ module.exports = {
         review: "test review 3 -spot3 -user1",
         stars: 5
       },
+      {
+        spotId: 2,
+        userId: 1,
+        review: "Review description from seeder",
+        stars: 4
+      },
+      {
+        spotId: 2,
+        userId: 4,
+        review: "Review from description from seeder",
+        stars: 3
+      },
     ], { validate: true });
   },
 

@@ -1,8 +1,22 @@
+.nav{
+    border-bottom: 2px solid black;
+}
+
 ul {
     display: flex;
-    justify-content: space-between;
     list-style-type: none;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
 }
+
+.rightSide{
+    display: flex;
+    justify-self: flex-end;
+    gap: 30px;
+}
+
+
 
 .profile-dropdown {
     display: block
