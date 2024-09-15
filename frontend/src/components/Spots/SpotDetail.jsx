@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import * as spotActions from '../../store/spots';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -12,17 +12,19 @@ import { AiFillStar } from "react-icons/ai"
 function SpotDetail() {
   const dispatch = useDispatch();
   const spot = useSelector(state => state.spotsReducer.spot)
-  // const getId = useParams()
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [params] = useState(useParams().spotId)
   const star = AiFillStar()
 
+  
   useEffect(() => {
-    const Unsub = () => {
-      dispatch(spotActions.getSingleSpot(useParams().spotId))
-    }
-    return () => {
-      Unsub()
-    }
+      dispatch(spotActions.getSingleSpot(params))
+      .then(()=> {
+        setIsLoaded(true)
+      })
+
   }, [dispatch])
+
   let dot = String.fromCodePoint(0x00B7)
 
   let isNew = spot ? spot.numReviews === 0 ? "New" : spot.numReviews === 1 ?
@@ -62,7 +64,7 @@ function SpotDetail() {
   return (
     <>
       <h1>SPOTS</h1>
-      {spot ? <div className="spots">
+      {spot && isLoaded ? <div className="spots">
         {checkOwner}
         <div>
           <h3>{spot.name}</h3>

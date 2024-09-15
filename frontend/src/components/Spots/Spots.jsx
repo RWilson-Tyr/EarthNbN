@@ -13,23 +13,19 @@ function Spots() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const unsub = async () => {
       dispatch(spotActions.getAllSpots())
       .then(() => {
         setIsLoaded(true)})
-    }
-    return () => {
-      unsub()
-    }
   }, [dispatch])
 
 let findSpots = (spots.map(spot => (
-          <div key={spot.id} className="spotContainer">
-            <NavLink to={`/spots/${spot.id}`}>
+  <div key={spot.id} className="spotContainer" >
+    {/* {console.log(spot.id)} */}
+            <NavLink to={`/spots/${spot.id}`} id={spot.id}>
             <span className="tooltiptext">{spot.name}</span>
               <img src={`${spot.previewImage.url}`}></img>
-            </NavLink>
               <p>{spot.city}, {spot.state} {star}{Math.round(spot.avgRating * 100)/100} <br></br>{spot.price} per night</p>
+            </NavLink>
           </div>
         )))
   

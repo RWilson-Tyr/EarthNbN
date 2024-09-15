@@ -10,12 +10,14 @@ import CreateSpot from './components/Spots/CreateSpot';
 import ManageSpot from './components/Spots/ManageSpots';
 import UpdateSpot from './components/Spots/UpdateSpot';
 
+
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    dispatch(sessionActions.restoreUser()).then(() => {
+    dispatch(sessionActions.restoreUser())
+    .then(() => {
       setIsLoaded(true)
     });
   }, [dispatch]);
@@ -34,7 +36,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Spots />
+        element: <Spots />,
       },
       {
         path: '/current',
