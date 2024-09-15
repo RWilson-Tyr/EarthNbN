@@ -13,7 +13,7 @@ router.get('/', async (req, res, next) => {
     try {
         let array = []
         const findSpots = await Spot.findAll({
-            // include: {model: SpotImage, attributes: ["url"]}
+            // include: {model: SpotImage}
 
         })
         let totalStars = 0;
@@ -24,6 +24,7 @@ router.get('/', async (req, res, next) => {
             for(review of findReviews){ totalStars += review.stars, totalReviews++}
 
             let avgRating = totalStars/totalReviews
+            console.log(findImg)
             spot.dataValues.previewImage = findImg
             spot.dataValues.avgRating = avgRating
             // spot.dataValues.previewImage = findImg[0].url

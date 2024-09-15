@@ -50,7 +50,7 @@ function CreateSpot() {
     <><div>
       <div className='partone'>
     <h1>Create a New Spot</h1>
-    <h3>Where`&apos;`s your place located?</h3>
+    <h3>Where&apos;s your place located?</h3>
     <caption>Guests will only get your exact address once they booked a reservation.</caption>
     </div>
     <form onSubmit={handleSubmit}>
@@ -127,14 +127,13 @@ function CreateSpot() {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
-          rows
         />
       </label>
       {/* {errors.description && <p>{errors.description}</p>} */}
       </div>
       <div className='formsectionthree'>
         <h3>Create a title for your spot</h3>
-        <caption>Catch guests`&apos;` attention with a spot title that highlights what makes your place special.</caption>
+        <caption>Catch guests&apos; attention with a spot title that highlights what makes your place special.</caption>
         <label className='name'>
         <input
           type="text"

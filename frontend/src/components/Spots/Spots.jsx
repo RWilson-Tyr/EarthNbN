@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
 import * as spotActions from '../../store/spots';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import "./Spots.css"
 import { AiFillStar } from 'react-icons/ai';
 
 
 function Spots() {
-  const navigate = useNavigate()
   const dispatch = useDispatch();
   const spots = useSelector(state => state.spotsReducer.spots)
   const star = AiFillStar()
@@ -36,7 +35,6 @@ let findSpots = (spots.map(spot => (
     <>
       <div className="spots">
         {spots ? findSpots : ""}
-        <button onClick={()=>navigate('/current')}>Manage</button>
       </div>
     </>
   );
