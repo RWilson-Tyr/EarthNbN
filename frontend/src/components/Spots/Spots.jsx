@@ -33,14 +33,14 @@ let findSpots = (spots.map(spot => (
           </div>
         )))
   
-
+{isLoaded
   return (
     <>
       <div className="spots">
-        {spots && isLoaded ? findSpots : ""}
+        {spots ? findSpots : ""}
       </div>
     </>
-  );
+  );}
 }
 
 export default Spots;
