@@ -38,6 +38,7 @@ function ManageSpot() {
       ))
   )
 
+if(spots){
   return (
     <>
       <h1>Manage Your Spots</h1>
@@ -48,7 +49,9 @@ function ManageSpot() {
         </div>}
       
     </>
-  );
+  );} else {
+    return (<p>...loading</p>)
+  }
 }
 
 export default ManageSpot;
