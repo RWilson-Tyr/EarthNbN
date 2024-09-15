@@ -20,18 +20,17 @@ router.get('/', async (req, res, next) => {
         let totalReviews = 0;
         for(spot of findSpots){
             let findReviews = await Review.findAll({where: {spotId : spot.id}})
-            let findImg = await SpotImage.findAll({where: {spotId: spot.id, preview: 1}})
-
-                for(review of findReviews){ totalStars += review.stars, totalReviews++}
+            let findImg = await SpotImage.findOne({where: {spotId: spot.id, preview: 1}})
+            for(review of findReviews){ totalStars += review.stars, totalReviews++}
 
             let avgRating = totalStars/totalReviews
-
-            spot.previewImage = findImg
+            spot.dataValues.previewImage = findImg
             spot.dataValues.avgRating = avgRating
-            spot.dataValues.previewImage = findImg[0].url
+            // spot.dataValues.previewImage = findImg[0].url
             array.push(spot)
             totalStars = 0;
             totalReviews = 0;
+            // console.log(spot)
         }
         res.json({ Spots: array })
     } catch (error) {
@@ -42,31 +41,37 @@ router.get('/', async (req, res, next) => {
 //READ - get all spots owned by current user
 router.get('/current', requireAuth, async (req, res, next) => {
     try {
-        let array = []
+        // let array = []
         let findSpots = await Spot.findAll({
             where: {
                 ownerId: req.user.id
+            },
+            include: {
+                model: SpotImage
             }
         })
-        let totalStars = 0;
-        let totalReviews = 0;
-        for(spot of findSpots){
-            let findReviews = await Review.findAll({where: {spotId : spot.id}})
-            let findImg = await SpotImage.findAll({where: {spotId: spot.id, preview: 1}})
+        // let totalStars = 0;
+        // let totalReviews = 0;
+        // for(spot of findSpots){
+        //     console.log(findSpots)
+        //     let findReviews = await Review.findAll({where: {spotId: spot.id}})
+        //     let findImg = await SpotImage.findOne({where: {spotId: spot.id, preview: 1}})
+            
+        //     for(review of findReviews){ totalStars += review.stars, totalReviews++}
+            
+        //     let avgRating = totalStars/totalReviews
+        //     if(findReviews[0] === undefined){avgRating = 0}
+            
+        //     spot.previewImage = findImg
+        //     spot.dataValues.avgRating = avgRating
+        //     spot.dataValues.previewImage = findImg
+        //     array.push(spot)
+        //     totalStars = 0;
+        //     totalReviews = 0;
+        // }
+        // res.json({ Spots: array })
 
-                for(review of findReviews){ totalStars += review.stars, totalReviews++}
-
-            let avgRating = totalStars/totalReviews
-            if(findReviews[0] === undefined){avgRating = 0}
-
-            spot.previewImage = findImg
-            spot.dataValues.avgRating = avgRating
-            spot.dataValues.previewImage = findImg[0].url
-            array.push(spot)
-            totalStars = 0;
-            totalReviews = 0;
-        }
-        res.json({ Spots: array })
+        res.json({Spots: findSpots})
     } catch (error) {
         next(error)
     }
@@ -76,7 +81,6 @@ router.get('/current', requireAuth, async (req, res, next) => {
 router.get('/:spotId', async (req, res, next) => {
     try {
         let spotId = parseInt(req.params.spotId)
-        let ownerId = req.user.id
         let spots = await Spot.findOne({
             where: {id: spotId},
             include: [{
