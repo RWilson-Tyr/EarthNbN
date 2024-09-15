@@ -18,23 +18,23 @@ router.get('/', async (req, res, next) => {
         })
         let totalStars = 0;
         let totalReviews = 0;
-        for(spot of findSpots){
-            console.log("BACKEND SPOT",spot.id)
+        // for(spot of findSpots){
+            // console.log("BACKEND SPOT",spot.id)
             // let findReviews = await Review.findAll({where: {spotId : spot.id}})
-            let findImg = await SpotImage.findOne({where: {spotId: spot.id, preview: 1}})
+            // let findImg = await SpotImage.findOne({where: {spotId: spot.id, preview: 1}})
             // for(review of findReviews){ totalStars += review.stars, totalReviews++}
 
             // let avgRating = totalStars/totalReviews
-            spot.dataValues.previewImage = findImg
+            // spot.dataValues.previewImage = findImg
             // spot.dataValues.avgRating = avgRating
             // spot.dataValues.previewImage = findImg[0].url
-            let push = async() => await array.push(spot)
-            push()
-            totalStars = 0;
-            totalReviews = 0;
+            // let push = async() => await array.push(spot)
+            // push()
+            // totalStars = 0;
+            // totalReviews = 0;
             // console.log(spot)
-        }
-        res.json({ Spots: array })
+        // }
+        res.json({ Spots: findSpots })
     } catch (error) {
         next(error)
     }
