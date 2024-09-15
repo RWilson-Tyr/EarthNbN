@@ -11,15 +11,13 @@ const rootReducer = combineReducers({
 });
 
 let enhancer;
-if (import.meta.env.MODE === "production2") {
+if (import.meta.env.MODE === "production") {
   enhancer = applyMiddleware(thunk);
 } else {
-  // const logger = (await import("redux-logger")).default;
+  const logger = (await import("redux-logger")).default;
   const composeEnhancers =
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-  enhancer = composeEnhancers(applyMiddleware(thunk
-    // , logger
-  ));
+  enhancer = composeEnhancers(applyMiddleware(thunk, logger));
 }
 
 const configureStore = (preloadedState) => {

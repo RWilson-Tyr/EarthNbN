@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => ({
   ],
   server: {
     proxy: {
-      '/api': 'https://earthnbn-jan.onrender.com/api'
+      '/api': 'https://earthnbn-jan.onrender.com'
     }
   }
   // To automatically open the app in the browser whenever the server starts,
