@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 import * as spotActions from '../../store/spots';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate} from 'react-router-dom';

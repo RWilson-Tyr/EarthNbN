@@ -12,15 +12,15 @@ import { AiFillStar } from "react-icons/ai"
 function SpotDetail() {
   const dispatch = useDispatch();
   const spot = useSelector(state => state.spotsReducer.spot)
-  const getId = useParams()
+  // const getId = useParams()
   const star = AiFillStar()
 
   useEffect(() => {
-    const unsub = () => {
-      dispatch(spotActions.getSingleSpot(getId.spotId))
+    const Unsub = () => {
+      dispatch(spotActions.getSingleSpot(useParams().spotId))
     }
     return () => {
-      unsub()
+      Unsub()
     }
   }, [dispatch])
   let dot = String.fromCodePoint(0x00B7)

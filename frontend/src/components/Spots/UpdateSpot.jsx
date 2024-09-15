@@ -6,7 +6,7 @@ import "./UpdateSpot.css"
 
 function UpdateSpot() {
     const dispatch = useDispatch();
-    const getId = useParams()
+    // const getId = useParams()
     const spot = useSelector(state => state.spotsReducer.curr)
     let navigate = useNavigate()
 
@@ -14,7 +14,8 @@ function UpdateSpot() {
 
     useEffect(() => {
         document.title="Update your Spot"
-        dispatch(spotActions.getSingleSpot(getId.spotid))
+        const Unsub = async () => {
+        dispatch(spotActions.getSingleSpot(useParams().spotid))
             .then((res) => {
                 setAddress(res.address)
                 setCity(res.city)
@@ -25,7 +26,10 @@ function UpdateSpot() {
                 setName(res.name)
                 setDescription(res.description)
                 setPrice(res.price)
-            })
+            })}
+            return () =>{
+                Unsub()
+              }
     }, [dispatch]);
 
     const [address, setAddress] = useState("");
@@ -38,8 +42,9 @@ function UpdateSpot() {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
 
-    const handleSubmit = async (e) => {
+    const HandleSubmit = async (e) => {
         e.preventDefault();
+        const getId = useParams()
 
         return dispatch(
             spotActions.updateSpot({
@@ -66,7 +71,7 @@ function UpdateSpot() {
     return (
         <>
             <h1>Update your Spot</h1>
-            {spot ? <form onSubmit={handleSubmit}>
+            {spot ? <form onSubmit={HandleSubmit}>
                 <label>
                     Address
                     <input
