@@ -18,11 +18,7 @@ function Spots() {
         setIsLoaded(true)})
   }, [dispatch])
 
-  const mappit = (spots) =>{
-    spots.map(spot=>spot.SpotImages.map(img=> {return img.url}))
-  }
-
-
+  console.log(spots)
   
   return (
     <>
