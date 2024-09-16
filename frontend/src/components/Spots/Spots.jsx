@@ -29,7 +29,7 @@ function Spots() {
   <div key={spot.id} className="spotContainer" >
             <NavLink to={`/spots/${spot.id}`} id={spot.id}>
             <span className="tooltiptext">{spot.name}</span>
-              <img src='https://www.houseplans.net/news/wp-content/uploads/2023/07/57260-768.jpeg'></img>
+              <img src={spot.SpotImages[0].url}></img>
               <p>{spot.city}, {spot.state} {star}{Math.round(spot.avgRating * 100)/100} <br></br>{spot.price} per night</p>
             </NavLink>
           </div>
