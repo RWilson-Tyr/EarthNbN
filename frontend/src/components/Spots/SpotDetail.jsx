@@ -69,11 +69,11 @@ function SpotDetail() {
         <div>
           <h3>{spot.name}</h3>
 
-          {spot.SpotImages.map((img) =>
+          {/* {spot.SpotImages.map((img) =>
             <div key={img.id}>
               <img src={img.url}></img>
             </div>
-          )}
+          )} */}
         </div>
         <p><br></br>
           Location: {spot.city},{spot.state},{spot.country}
