@@ -1,4 +1,4 @@
-import { useEffect,  } from 'react';
+import { useEffect } from 'react';
 import * as spotActions from '../../store/spots';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -9,21 +9,21 @@ import { AiFillStar } from 'react-icons/ai';
 function Spots() {
   const dispatch = useDispatch();
   const spots = useSelector(state => state.spotsReducer.spots)
-  const star = AiFillStar()
   // const [isLoaded, setIsLoaded] = useState(false);
+  const star = AiFillStar()
 
   useEffect(() => {
-    const unsub = async () => {
       dispatch(spotActions.getAllSpots())
       // .then(() => {
       //   setIsLoaded(true)})
-    }
-    return () => {
-      unsub()
-    }
   }, [dispatch])
 
-let findSpots = (spots.map(spot => (
+// let findSpots = ()
+  
+  return (
+    <>
+      <div className="spots">
+      {spots && spots.map(spot => (
   <div key={spot.id} className="spotContainer" >
             <NavLink to={`/spots/${spot.id}`} id={spot.id}>
             <span className="tooltiptext">{spot.name}</span>
@@ -31,12 +31,7 @@ let findSpots = (spots.map(spot => (
               <p>{spot.city}, {spot.state} {star}{Math.round(spot.avgRating * 100)/100} <br></br>{spot.price} per night</p>
             </NavLink>
           </div>
-        )))
-  
-  return (
-    <>
-      <div className="spots">
-      {spots ? findSpots : <p>made it here</p>}
+        ))}
       </div>
     </>
   );
