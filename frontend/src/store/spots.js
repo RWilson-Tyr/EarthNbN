@@ -174,12 +174,16 @@ export const createSpot = ({
     }
   };
 
-const initalState = { spots: [], curr: [] }
+const initalState = { spots: [], curr: [], spot: [] }
 
 const spotsReducer = (state = initalState, action) => {
   switch (action.type) {
     case SPOTS:
-      return { ...state, spots: [...action.spots] }
+      {
+        const newState = { ...state };
+        newState.spots = action.spots;
+        return newState;
+      }
     case SINGLE_SPOT:
       {
         const newState = { ...state };
