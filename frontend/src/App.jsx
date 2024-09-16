@@ -9,13 +9,16 @@ import SpotDetail from './components/Spots/SpotDetail';
 import CreateSpot from './components/Spots/CreateSpot';
 import ManageSpot from './components/Spots/ManageSpots';
 import UpdateSpot from './components/Spots/UpdateSpot';
+import { Navigate } from 'react-router-dom';
+
 
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    dispatch(sessionActions.restoreUser()).then(() => {
+    dispatch(sessionActions.restoreUser())
+    .then(() => {
       setIsLoaded(true)
     });
   }, [dispatch]);
@@ -34,7 +37,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Spots />
+        element: <Spots />,
       },
       {
         path: '/current',
@@ -55,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: '/spots/:spotid/edit',
         element: <UpdateSpot />
+      },
+      {
+        path: '*',
+        element: <Navigate to='/' replace={true} />,
       },
     ]
   }

@@ -73,7 +73,7 @@ export const updateSpot = ({
     }
   };
 
-export const deleteReview = (payload) => async dispatch => {
+export const deleteReview = (payload) => async (dispatch) => {
   let res = await csrfFetch(`/api/reviews/${payload.reviewId}`, {
     method: "DELETE"
   })
@@ -85,7 +85,7 @@ export const deleteReview = (payload) => async dispatch => {
   }
 }
 
-export const deleteSpot = (spotId) => async dispatch => {
+export const deleteSpot = (spotId) => async (dispatch) => {
   let res = await csrfFetch(`/api/spots/${spotId}`, {
     method: "DELETE"
   })
@@ -112,7 +112,7 @@ async (dispatch) => {
     }
   };
 
-export const getCurrent = () => async dispatch => {
+export const getCurrent = () => async (dispatch) => {
   let res = await csrfFetch(`/api/spots/current`)
 
   if (res.ok) {
@@ -122,8 +122,8 @@ export const getCurrent = () => async dispatch => {
   }
 }
 
-export const getAllSpots = () => async dispatch => {
-  let res = await fetch(`/api/spots`)
+export const getAllSpots = () => async (dispatch) => {
+  let res = await csrfFetch(`/api/spots`)
 
   if (res.ok) {
     res = await res.json()
@@ -132,7 +132,7 @@ export const getAllSpots = () => async dispatch => {
   }
 }
 
-export const getSingleSpot = (spotId) => async dispatch => {
+export const getSingleSpot = (spotId) => async (dispatch) => {
   let res = await fetch(`/api/spots/${spotId}`)
 
   if (res.ok) {
@@ -174,7 +174,7 @@ export const createSpot = ({
     }
   };
 
-const initalState = { spots: [], curr: [] }
+const initalState = { spots: [], curr: [], spot: [] }
 
 const spotsReducer = (state = initalState, action) => {
   switch (action.type) {

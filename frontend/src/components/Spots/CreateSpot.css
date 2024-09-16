@@ -35,10 +35,10 @@ label input{
         width: 35%;
         border-bottom: 1px solid black
     }
-    h3 {
+    :is(h3) {
         align-self: center;
     }
-    caption {
+    :is(caption) {
         width:35%;
         align-self: center;
     }
@@ -61,10 +61,10 @@ label input{
         width: 35%;
         border-bottom: 1px solid black
     }
-    h3 {
+    :is(h3) {
         align-self: center;
     }
-    caption {
+    :is(caption) {
         width:35%;
         align-self: center;
     }
@@ -89,10 +89,10 @@ label input{
         width: 35%;
         border-bottom: 1px solid black
     }
-    h3 {
+    :is(h3) {
         align-self: center;
     }
-    caption {
+    :is(caption) {
         width:35%;
         align-self: center;
     }
@@ -114,10 +114,10 @@ label input{
         width: 35%;
         border-bottom: 1px solid black
     }
-    h3 {
+    :is(h3) {
         align-self: center;
     }
-    caption {
+    :is(caption) {
         width:35%;
         align-self: center;
     }

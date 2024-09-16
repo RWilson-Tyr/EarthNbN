@@ -11,28 +11,33 @@ const today = new Date()
 router.get('/', async (req, res, next) => {
 
     try {
-        let array = []
+        // let array = []
         const findSpots = await Spot.findAll({
-            // include: {model: SpotImage, attributes: ["url"]}
+            // include: {model: SpotImage, attributes: ['url']}
+            include: {all: true}
+            // ,
+            // {
+            // include: {model: Review}}
 
         })
-        let totalStars = 0;
-        let totalReviews = 0;
-        for(spot of findSpots){
-            let findReviews = await Review.findAll({where: {spotId : spot.id}})
-            let findImg = await SpotImage.findOne({where: {spotId: spot.id, preview: 1}})
-            for(review of findReviews){ totalStars += review.stars, totalReviews++}
+        // let totalStars = 0;
+        // let totalReviews = 0;
+        // for(spot of findSpots){
+        //     console.log("BACKEND SPOT",spot.id)
+        //     let findReviews = await Review.findAll({where: {spotId : spot.id}})
+        //     let findImg = await SpotImage.findOne({where: {spotId: spot.id, preview: 1}})
+        //     for(review of findReviews){ totalStars += review.stars, totalReviews++}
 
-            let avgRating = totalStars/totalReviews
-            spot.dataValues.previewImage = findImg
-            spot.dataValues.avgRating = avgRating
-            // spot.dataValues.previewImage = findImg[0].url
-            array.push(spot)
-            totalStars = 0;
-            totalReviews = 0;
-            // console.log(spot)
-        }
-        res.json({ Spots: array })
+        //     let avgRating = totalStars/totalReviews
+        //     spot.dataValues.previewImage = findImg
+        //     spot.dataValues.avgRating = avgRating
+        //     // spot.dataValues.previewImage = findImg[0].url
+        //     array.push(spot)
+        //     totalStars = 0;
+        //     totalReviews = 0;
+        //     // console.log(spot)
+        // }
+        res.json({ Spots: findSpots })
     } catch (error) {
         next(error)
     }

@@ -10,14 +10,14 @@ function Reviews() {
     // const spot = useSelector(state => state.spotsReducer)
     const reviews = useSelector(state => state.reviewsReducer.reviews.Reviews)
     // const [errors, setErrors] = useState([]);
-    let getId = useParams()
+    // const getId = useParams()
 
     useEffect(()=> {
-      const unsub = async () => {
-        dispatch(reviewActions.getAllReviews(getId))
+      const Unsub = async () => {
+        dispatch(reviewActions.getAllReviews(useParams()))
       }
       return () =>{
-        unsub()
+        Unsub()
       }
     }, [dispatch])
   

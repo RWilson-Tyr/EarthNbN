@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import * as sessionActions from './store/session'; // <-- ADD THIS LINE
+import * as spotActions from './store/spots'
+import * as reviewActions from './store/reviews'
 import { restoreCSRF, csrfFetch } from './store/csrf';
 import App from './App';
 import './index.css';
@@ -17,6 +19,8 @@ if (import.meta.env.MODE !== "production") {
   window.csrfFetch = csrfFetch
   window.store = store
   window.sessionActions = sessionActions
+  window.spotActions = spotActions
+  window.reviewActions = reviewActions
 }
 
 

@@ -56,9 +56,9 @@ function ReviewModal(spotId) {
             placeholder='Input the amout of stars (1-5)'
           />
         </label>
-        {/* {errors.xxxx && (
+        {errors.xxxx && (
           <p>{errors.xxxx}</p>
-        )} */}
+        )}
         <button disabled={condition} type="submit">Submit Your Review</button>
       </form>
     </>
