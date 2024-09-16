@@ -13,7 +13,11 @@ router.get('/', async (req, res, next) => {
     try {
         // let array = []
         const findSpots = await Spot.findAll({
-            include: [{model: SpotImage}]
+            // include: {model: SpotImage, attributes: ['url']}
+            include: {all: true}
+            // ,
+            // {
+            // include: {model: Review}}
 
         })
         // let totalStars = 0;
