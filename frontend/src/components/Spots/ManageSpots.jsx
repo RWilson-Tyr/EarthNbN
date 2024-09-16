@@ -48,11 +48,11 @@ function ManageSpot() {
     <>
       <h1>Manage Your Spots</h1>
      <div className="spots">
-      {isLoaded && spots.map(spot => (
+      {spots && isLoaded && spots.map(spot => (
       <div key={spot.id} className="spotContainer">
           <NavLink to={`/spots/${spot.id}`}>
           <span className="tooltiptext">{spot.name}</span>
-            <img src={spot.SpotImages[0].url}></img>
+            <img src="testing.url"></img>
           </NavLink>
             <p>{spot.city}, {spot.state} {spot.avgRating} <br></br>{spot.price} per night</p>
           <button onClick={()=>navigate(`/spots/${spot.id}/edit`)}>Update</button>

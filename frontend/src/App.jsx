@@ -9,6 +9,7 @@ import SpotDetail from './components/Spots/SpotDetail';
 import CreateSpot from './components/Spots/CreateSpot';
 import ManageSpot from './components/Spots/ManageSpots';
 import UpdateSpot from './components/Spots/UpdateSpot';
+import { Navigate } from 'react-router-dom';
 
 
 function Layout() {
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: '/spots/:spotid/edit',
         element: <UpdateSpot />
+      },
+      {
+        path: '*',
+        element: <Navigate to='/' replace={true} />,
       },
     ]
   }
