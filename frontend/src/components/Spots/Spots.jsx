@@ -18,7 +18,9 @@ function Spots() {
         setIsLoaded(true)})
   }, [dispatch])
 
-  console.log(spots)
+  const mappit = (spots) =>{
+    spots.map(spot=>spot.SpotImages.map(img=> {return img.url}))
+  }
 
 
   
@@ -29,7 +31,7 @@ function Spots() {
   <div key={spot.id} className="spotContainer" >
             <NavLink to={`/spots/${spot.id}`} id={spot.id}>
             <span className="tooltiptext">{spot.name}</span>
-              <img src={spot.SpotImages[0].url}></img>
+              <img src={mappit}></img>
               <p>{spot.city}, {spot.state} {star}{Math.round(spot.avgRating * 100)/100} <br></br>{spot.price} per night</p>
             </NavLink>
           </div>
