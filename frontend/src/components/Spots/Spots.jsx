@@ -18,6 +18,8 @@ function Spots() {
         setIsLoaded(true)})
   }, [dispatch])
 
+  console.log(spots)
+
 
   
   return (
