@@ -179,11 +179,7 @@ const initalState = { spots: [], curr: [] }
 const spotsReducer = (state = initalState, action) => {
   switch (action.type) {
     case SPOTS:
-      {
-        const newState = { ...state };
-        newState.spots = action.spots;
-        return newState;
-      }
+      return { ...state, spots: [...action.spots] }
     case SINGLE_SPOT:
       {
         const newState = { ...state };
