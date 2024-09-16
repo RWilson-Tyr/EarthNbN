@@ -123,7 +123,7 @@ export const getCurrent = () => async (dispatch) => {
 }
 
 export const getAllSpots = () => async (dispatch) => {
-  let res = await fetch(`/api/spots`)
+  let res = await csrfFetch(`/api/spots`)
 
   if (res.ok) {
     res = await res.json()
