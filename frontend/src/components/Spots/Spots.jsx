@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect,  } from 'react';
 import * as spotActions from '../../store/spots';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -10,13 +10,13 @@ function Spots() {
   const dispatch = useDispatch();
   const spots = useSelector(state => state.spotsReducer.spots)
   const star = AiFillStar()
-  const [isLoaded, setIsLoaded] = useState(false);
+  // const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const unsub = async () => {
       dispatch(spotActions.getAllSpots())
-      .then(() => {
-        setIsLoaded(true)})
+      // .then(() => {
+      //   setIsLoaded(true)})
     }
     return () => {
       unsub()
@@ -33,11 +33,10 @@ let findSpots = (spots.map(spot => (
           </div>
         )))
   
-{isLoaded}
   return (
     <>
       <div className="spots">
-        {spots && isLoaded ? findSpots : ""}
+      {spots ? findSpots : <p>made it here</p>}
       </div>
     </>
   );
