@@ -19,6 +19,7 @@ function Spots() {
   }, [dispatch])
 
   console.log(spots)
+  //"id" just keeps counting up
   
   return (
     <>
